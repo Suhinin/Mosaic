@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 27
@@ -7,7 +8,10 @@ android {
         minSdkVersion 16
         targetSdkVersion 27
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
+        resValue "integer", "database_version", "0"
+        resValue "string", "advertising__admob_app_id", "ca-app-pub-2782764292160236~1266306212"
+        resValue "string", "advertising__ad_unit_id", "ca-app-pub-2782764292160236/5752346139"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -15,12 +19,49 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            ext.enableCrashlytics = false
+        }
+        releaseDebug {
+            initWith release
+            debuggable true
+        }
     }
 }
 
+def DaggerVersion = "2.11"
+def SupportVersion = "27.1.1"
+def GlideVersion = "4.6.1"
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation "com.android.support:appcompat-v7:$SupportVersion"
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    // Dagger core
+    annotationProcessor "com.google.dagger:dagger-compiler:$DaggerVersion"
+    implementation "com.google.dagger:dagger:$DaggerVersion"
+
+    // Dagger Android
+    annotationProcessor "com.google.dagger:dagger-android-processor:$DaggerVersion"
+    implementation "com.google.dagger:dagger-android-support:$DaggerVersion"
+
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.0'
+
+    implementation 'com.google.android.gms:play-services-ads:15.0.0'
+
+    implementation('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+        transitive = true;
+    }
+
+    implementation "com.github.bumptech.glide:glide:$GlideVersion"
+    annotationProcessor "com.github.bumptech.glide:compiler:$GlideVersion"
+
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
