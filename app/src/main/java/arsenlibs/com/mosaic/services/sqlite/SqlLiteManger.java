@@ -28,12 +28,12 @@ public class SqlLiteManger extends SQLiteOpenHelper implements DBManager {
     }
 
     @Override
-    public void onCreate (SQLiteDatabase db) {
+    public void onCreate(SQLiteDatabase db) {
         // empty
     }
 
     @Override
-    public void onUpgrade (SQLiteDatabase db, int oldVersion, int newVersion) {
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // TODO temp remove all tables
         Cursor c = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
         while (c.moveToNext()) {
@@ -77,4 +77,10 @@ public class SqlLiteManger extends SQLiteOpenHelper implements DBManager {
         return db.query(table, null, selection, selectionArgs, null, null, null);
     }
 
+    @Override
+    public Cursor getAll(String table) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        return db.query(table, null, null, null, null, null, null);
+    }
 }

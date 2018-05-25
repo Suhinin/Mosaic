@@ -37,12 +37,6 @@ public class ServicesModule {
         return service;
     }
 
-//    @Provides
-//    @Singleton
-//    public ResourceService provideResources(ResourceServiceStandard service) {
-//        return service;
-//    }
-//
     @Provides
     @Singleton
     public LoggerService provideLogger(LoggerFabric service) {

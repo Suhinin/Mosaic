@@ -5,4 +5,6 @@ public interface AssetsService {
 
     String[] getList(String folder);
 
+    String readText(String path);
+
 }

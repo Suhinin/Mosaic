@@ -16,6 +16,8 @@ public interface DBManager {
 
     Cursor get(String table, String selection, String[] selectionArgs);
 
+    Cursor getAll(String table);
+
     void close();
 
 }
