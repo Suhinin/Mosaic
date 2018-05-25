@@ -1,15 +1,18 @@
 package arsenlibs.com.mosaic.di.modules;
 
 
+import arsenlibs.com.mosaic.presenters.main.MainPresenter;
+import arsenlibs.com.mosaic.ui.main.MainContract;
 import dagger.Module;
+import dagger.Provides;
 
 
 @Module
-public class PresentersModule {
+abstract public class PresentersModule {
 
-//    @Provides
-//    public MainMenuContract.Presenter provideMainMenuPresenter(MainMenuPresenter presenter){
-//        return presenter;
-//    }
+    @Provides
+    public MainContract.Presenter provideMainPresenter(MainPresenter presenter){
+        return presenter;
+    }
 
 }
