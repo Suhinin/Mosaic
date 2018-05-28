@@ -17,7 +17,7 @@ import dagger.Provides;
 
 
 @Module
-public class ServicesModule {
+abstract public class ServicesModule {
 
 //    @Provides
 //    @Singleton
