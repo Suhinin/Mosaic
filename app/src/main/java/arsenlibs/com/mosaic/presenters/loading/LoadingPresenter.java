@@ -1,11 +1,7 @@
 package arsenlibs.com.mosaic.presenters.loading;
 
-import android.widget.ImageView;
-
 import javax.inject.Inject;
 
-import arsenlibs.com.mosaic.services.imageloader.ImageLoaderService;
-import arsenlibs.com.mosaic.services.imageloader.ImageLoaderStandard;
 import arsenlibs.com.mosaic.ui.loading.LoadingContract;
 import arsenlibs.com.mosaic.ui.loading.LoadingViewNull;
 

@@ -1,7 +1,5 @@
 package arsenlibs.com.mosaic.ui.loading;
 
-import android.widget.ImageView;
-
 public interface LoadingContract {
 
     interface View {
@@ -11,6 +9,7 @@ public interface LoadingContract {
     interface Presenter {
 
         void onAttachView(View view);
+
         void onDetachView();
 
     }

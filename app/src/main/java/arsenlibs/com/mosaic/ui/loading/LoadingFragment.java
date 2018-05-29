@@ -22,6 +22,7 @@ public class LoadingFragment extends DaggerFragment implements LoadingContract.V
     // endregion
 
     // region Injections
+
     @Inject
     protected LoadingPresenter mPresenter;
     @Inject
@@ -30,6 +31,7 @@ public class LoadingFragment extends DaggerFragment implements LoadingContract.V
     // endregion
 
     // region View Components
+
     private FrameLayout mRootView;
     private ImageView mImageBackground;
 
@@ -55,7 +57,6 @@ public class LoadingFragment extends DaggerFragment implements LoadingContract.V
         return createView();
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
@@ -76,13 +77,16 @@ public class LoadingFragment extends DaggerFragment implements LoadingContract.V
     private View createView() {
         mRootView = new FrameLayout(getContext());
         mImageBackground = new ImageView(getContext());
+        mRootView.addView(mImageBackground);
         mImageBackground.setCropToPadding(true);
         mImageBackground.setScaleType(ImageView.ScaleType.FIT_XY);
-        mImageBackground.setScaleType(ImageView.ScaleType.FIT_CENTER);
         mImageBackground.setAdjustViewBounds(true);
-        mRootView.addView(mImageBackground);
-        mImageLoaderService.loadAssets(ASSETS_BACKGROUND, mImageBackground);
+        loadBackground();
         return mRootView;
+    }
+
+    private void loadBackground() {
+        mImageLoaderService.loadAssets(ASSETS_BACKGROUND, mImageBackground);
     }
 
     // endregion
