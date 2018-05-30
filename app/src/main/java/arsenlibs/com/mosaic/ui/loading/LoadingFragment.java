@@ -11,6 +11,8 @@ import javax.inject.Inject;
 
 import arsenlibs.com.mosaic.presenters.loading.LoadingPresenter;
 import arsenlibs.com.mosaic.services.imageloader.ImageLoaderService;
+import arsenlibs.com.mosaic.utils.LayoutHelper;
+import arsenlibs.com.mosaic.utils.ScreenUtil;
 import dagger.android.support.DaggerFragment;
 
 public class LoadingFragment extends DaggerFragment implements LoadingContract.View {
@@ -21,6 +23,7 @@ public class LoadingFragment extends DaggerFragment implements LoadingContract.V
 
     // endregion
 
+
     // region Injections
 
     @Inject
@@ -30,12 +33,13 @@ public class LoadingFragment extends DaggerFragment implements LoadingContract.V
 
     // endregion
 
+
     // region View Components
 
     private FrameLayout mRootView;
-    private ImageView mImageBackground;
 
     // endregion
+
 
     // region Constructors
 
@@ -50,7 +54,8 @@ public class LoadingFragment extends DaggerFragment implements LoadingContract.V
 
     // endregion
 
-    // region Implements DaggerAppCompatActivity
+
+    // region Implements DaggerFragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,6 +65,7 @@ public class LoadingFragment extends DaggerFragment implements LoadingContract.V
     @Override
     public void onResume() {
         super.onResume();
+
         mPresenter.onAttachView(this);
     }
 
@@ -72,21 +78,25 @@ public class LoadingFragment extends DaggerFragment implements LoadingContract.V
 
     // endregion
 
+
     // region Init View
 
     private View createView() {
         mRootView = new FrameLayout(getContext());
-        mImageBackground = new ImageView(getContext());
-        mRootView.addView(mImageBackground);
-        mImageBackground.setCropToPadding(true);
-        mImageBackground.setScaleType(ImageView.ScaleType.FIT_XY);
-        mImageBackground.setAdjustViewBounds(true);
-        loadBackground();
+
+        addBackground();
+
         return mRootView;
     }
 
-    private void loadBackground() {
-        mImageLoaderService.loadAssets(ASSETS_BACKGROUND, mImageBackground);
+    private void addBackground() {
+        ImageView imageBackground = new ImageView(getContext());
+        imageBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        mRootView.addView(imageBackground, LayoutHelper.createFramePx(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+
+        int width = ScreenUtil.getScreenSize(getContext()).x;
+        int height = ScreenUtil.getScreenSize(getContext()).y;
+        mImageLoaderService.loadAssets(ASSETS_BACKGROUND, width, height, imageBackground);
     }
 
     // endregion

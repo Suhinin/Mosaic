@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <integer name="frame_width_px">1280</integer>
+    <integer name="frame_height_px">720</integer>
+
+</resources>

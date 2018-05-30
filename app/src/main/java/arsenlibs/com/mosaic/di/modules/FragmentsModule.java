@@ -9,7 +9,5 @@ abstract public class FragmentsModule {
 
     @ContributesAndroidInjector
     abstract LoadingFragment provideLoadingFragment();
-//    @ContributesAndroidInjector
-//    abstract MainMenuFragment provideMainMenuFragment();
 
 }
