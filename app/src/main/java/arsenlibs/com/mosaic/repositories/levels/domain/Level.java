@@ -7,7 +7,7 @@ public interface Level {
 
     int getNumber();
 
-    void setNumber(int number);
+    String getPreviewPath();
 
     LevelState getState();
 

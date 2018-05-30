@@ -13,8 +13,8 @@ public class LevelNull implements Level {
     }
 
     @Override
-    public void setNumber(int number) {
-        // empty stub
+    public String getPreviewPath() {
+        return "";
     }
 
     @Override

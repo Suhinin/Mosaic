@@ -79,6 +79,7 @@ public class LevelsRepositoryStandard implements LevelsRepository {
         LevelImpl level = new LevelImpl();
         level.setId(levelData.getId());
         level.setNumber(levelData.getNumber());
+        level.setPreviewPath(levelData.getPreviewPath());
         level.setPalette(levelData.getPalette());
         level.setBoard(levelData.getBoard());
 

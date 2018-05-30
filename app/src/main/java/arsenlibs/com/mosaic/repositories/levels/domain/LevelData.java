@@ -5,6 +5,7 @@ public class LevelData {
 
     private String mId;
     private int mNumber;
+    private String mPreviewPath;
     private PalettePiece[] mPalette;
     private String[][] mBoard;
 
@@ -22,6 +23,14 @@ public class LevelData {
 
     public void setNumber(int number) {
         mNumber = number;
+    }
+
+    public String getPreviewPath() {
+        return mPreviewPath;
+    }
+
+    public void setPreviewPath(String previewPath) {
+        mPreviewPath = previewPath;
     }
 
     public PalettePiece[] getPalette() {

@@ -7,6 +7,7 @@ public class LevelImpl implements Level {
 
     private String mId;
     private int mNumber;
+    private String mPreviewPath;
     private LevelState mState;
     private boolean mIsShowOnBoarding;
     private int mIncorrectAnswers;
@@ -34,8 +35,8 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public void setNumber(int number) {
-        mNumber = number;
+    public String getPreviewPath() {
+        return mPreviewPath;
     }
 
     @Override
@@ -80,6 +81,14 @@ public class LevelImpl implements Level {
 
     public void setId(String id) {
         mId = id;
+    }
+
+    public void setNumber(int number) {
+        mNumber = number;
+    }
+
+    public void setPreviewPath(String previewPath) {
+        mPreviewPath = previewPath;
     }
 
     public void setPalette(PalettePiece[] palette) {
