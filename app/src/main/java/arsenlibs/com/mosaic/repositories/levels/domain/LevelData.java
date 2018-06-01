@@ -3,11 +3,25 @@ package arsenlibs.com.mosaic.repositories.levels.domain;
 
 public class LevelData {
 
+    // region Constants
+
+    public static final String EMPTY_CELL = "empty_cell";
+
+    // endregion
+
+
+    // region Fields
+
     private String mId;
     private int mNumber;
     private String mPreviewPath;
     private PalettePiece[] mPalette;
     private String[][] mBoard;
+
+    // endregion
+
+
+    // region Public Methods
 
     public String getId() {
         return mId;
@@ -48,5 +62,7 @@ public class LevelData {
     public void setBoard(String[][] board) {
         mBoard = board;
     }
+
+    // endregion
 
 }

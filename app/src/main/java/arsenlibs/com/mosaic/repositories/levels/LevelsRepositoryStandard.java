@@ -1,7 +1,13 @@
 package arsenlibs.com.mosaic.repositories.levels;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -24,12 +30,21 @@ public class LevelsRepositoryStandard implements LevelsRepository {
     // endregion
 
 
+    // region Fields
+
+    private Map<String, Level> mLevels;
+
+    // endregion
+
+
     // region
 
     @Inject
     public LevelsRepositoryStandard(LevelsDao levelsDao, LevelBuilder levelBuilder) {
         mLevelsDao = levelsDao;
         mLevelBuilder = levelBuilder;
+
+        loadLevels();           // TODO temp. Must be moved to loading fragment
     }
 
     // endregion
@@ -37,17 +52,15 @@ public class LevelsRepositoryStandard implements LevelsRepository {
 
     // region Implements LevelsRepository
 
+
+    @Override
+    public void loadLevels() {
+        createLevels();
+    }
+
     @Override
     public Level[] getLevels() {
-        LevelData[] levelDatas = mLevelBuilder.getLevels();
-        if (levelDatas.length == 0) {
-            return new Level[0];
-        }
-
-        Level[] levels = new Level[levelDatas.length];
-        for (int i=0; i<levelDatas.length; i++) {
-            levels[i] = createLevel(levelDatas[i]);
-        }
+        Level[] levels = mLevels.values().toArray(new Level[0]);
 
         Arrays.sort(levels, new LevelsComparator());
 
@@ -56,12 +69,11 @@ public class LevelsRepositoryStandard implements LevelsRepository {
 
     @Override
     public Level getLevel(String id) {
-        LevelData levelData = mLevelBuilder.getLevel(id);
-        if (levelData == null) {
+        if (mLevels.containsKey(id) == false) {
             return new LevelNull();
         }
 
-        return createLevel(levelData);
+        return mLevels.get(id);
     }
 
     @Override
@@ -74,6 +86,20 @@ public class LevelsRepositoryStandard implements LevelsRepository {
 
 
     // region Private Methods
+
+    private void createLevels() {
+        mLevels = new HashMap<>();
+
+        LevelData[] levelDatas = mLevelBuilder.createLevels();
+        if (levelDatas.length == 0) {
+            return;
+        }
+
+        for (LevelData levelData : levelDatas) {
+            Level level = createLevel(levelData);
+            mLevels.put(level.getId(), level);
+        }
+    }
 
     private Level createLevel(LevelData levelData) {
         LevelImpl level = new LevelImpl();

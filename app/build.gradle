@@ -7,9 +7,9 @@ android {
         applicationId "arsenlibs.com.mosaic"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 1
+        versionCode 100
         versionName "1.0.0"
-        resValue "integer", "database_version", "0"
+        resValue "integer", "database_version", "1"
         resValue "string", "advertising__admob_app_id", "ca-app-pub-2782764292160236~1266306212"
         resValue "string", "advertising__ad_unit_id", "ca-app-pub-2782764292160236/5752346139"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

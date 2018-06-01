@@ -94,8 +94,8 @@ public class LoadingFragment extends DaggerFragment implements LoadingContract.V
         imageBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
         mRootView.addView(imageBackground, LayoutHelper.createFramePx(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
-        int width = ScreenUtil.getScreenSize(getContext()).x;
-        int height = ScreenUtil.getScreenSize(getContext()).y;
+        int width = ScreenUtil.getScreenSize(getContext()).getWidth();
+        int height = ScreenUtil.getScreenSize(getContext()).getHeight();
         mImageLoaderService.loadAssets(ASSETS_BACKGROUND, width, height, imageBackground);
     }
 

@@ -10,6 +10,7 @@ import javax.inject.Inject;
 
 import arsenlibs.com.mosaic.R;
 import arsenlibs.com.mosaic.presenters.main.MainPresenter;
+import arsenlibs.com.mosaic.ui.board.BoardFragment;
 import arsenlibs.com.mosaic.ui.loading.LoadingFragment;
 import arsenlibs.com.mosaic.utils.FragmentStack;
 import dagger.android.support.DaggerAppCompatActivity;
@@ -48,8 +49,9 @@ public class MainActivity extends DaggerAppCompatActivity implements MainContrac
 
         mDecorView = getWindow().getDecorView();
         mFragmentStack = new FragmentStack(getSupportFragmentManager(), R.id.main_activity__fragment_container_id);
-//            mFragmentStack.replace(MainMenuFragment.newInstance());
-            mFragmentStack.replace(LoadingFragment.newInstance());
+//            mFragmentStack.replace(LoadingFragment.newInstance());
+        mFragmentStack.replace(BoardFragment.newInstance());
+
     }
 
     @Override

@@ -55,25 +55,13 @@ public class LevelBuilderStandard implements LevelBuilder {
     // region Implements
 
     @Override
-    public LevelData[] getLevels() {
+    public LevelData[] createLevels() {
         String[] levelConfigs = mAssetsService.getList(ASSETS_LEVELS_FOLDER);
         if (levelConfigs == null || levelConfigs.length == 0) {
             return new LevelData[0];
         }
 
         return readLevels(levelConfigs);
-    }
-
-    @Override
-    public LevelData getLevel(String id) {
-        LevelData[] levelDatas = getLevels();
-        for (LevelData levelData : levelDatas) {
-            if (id.equals(levelData.getId())) {
-                return levelData;
-            }
-        }
-
-        return null;
     }
 
     // endregion
@@ -138,6 +126,12 @@ public class LevelBuilderStandard implements LevelBuilder {
         }
 
         String[][] boardCells = new String[board.rows][board.cols];
+        for (int i=0; i<board.rows; i++) {
+            for (int j=0; j<board.cols; j++) {
+                boardCells[i][j] = LevelData.EMPTY_CELL;
+            }
+        }
+
         for (Cell cell : board.filledCells) {
             boardCells[cell.row][cell.col] = cell.pieceId;
         }

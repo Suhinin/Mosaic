@@ -10,7 +10,7 @@ public class Piece {
     @SerializedName("color_hex")
     public String colorHex;
 
-    @SerializedName("piece_id")
+    @SerializedName("image_path")
     public String imagePath;
 
 }

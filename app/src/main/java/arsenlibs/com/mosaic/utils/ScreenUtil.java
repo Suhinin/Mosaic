@@ -8,6 +8,7 @@ import android.view.Display;
 import android.view.WindowManager;
 
 import arsenlibs.com.mosaic.R;
+import arsenlibs.com.mosaic.ui.common.Size;
 
 
 public class ScreenUtil {
@@ -15,7 +16,7 @@ public class ScreenUtil {
     private static final String TAG = ScreenUtil.class.getCanonicalName();
 
     public static int getScreenX(Context context, int frameX) {
-        int screenWidth = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) ? getRealScreenSize(context).x : getAppUsableScreenSize(context).x;
+        int screenWidth = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) ? getRealScreenSize(context).getWidth() : getAppUsableScreenSize(context).getWidth();
         int frameWidth = context.getResources().getInteger(R.integer.frame_width_px);
 
         return getScreenX(frameX, frameWidth, screenWidth);
@@ -28,7 +29,7 @@ public class ScreenUtil {
     }
 
     public static int getScreenY(Context context, int frameY) {
-        int screenHeight = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) ? getRealScreenSize(context).y : getAppUsableScreenSize(context).y;
+        int screenHeight = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) ? getRealScreenSize(context).getHeight() : getAppUsableScreenSize(context).getHeight();
         int frameHeight = context.getResources().getInteger(R.integer.frame_height_px);
 
         return getScreenY(frameY, frameHeight, screenHeight);
@@ -52,48 +53,53 @@ public class ScreenUtil {
         return (int)y;
     }
 
-    public static Point getNavigationBarSize(Context context) {
-        Point appUsableSize = getAppUsableScreenSize(context);
-        Point realScreenSize = getRealScreenSize(context);
+    public static Size getNavigationBarSize(Context context) {
+        Size appUsableSize = getAppUsableScreenSize(context);
+        Size realScreenSize = getRealScreenSize(context);
 
         // navigation bar on the right
-        if (appUsableSize.x < realScreenSize.x) {
-            return new Point(realScreenSize.x - appUsableSize.x, appUsableSize.y);
+        if (appUsableSize.getWidth() < realScreenSize.getWidth()) {
+            return new Size(realScreenSize.getWidth() - appUsableSize.getWidth(), appUsableSize.getHeight());
         }
 
         // navigation bar at the bottom
-        if (appUsableSize.y < realScreenSize.y) {
-            return new Point(appUsableSize.x, realScreenSize.y - appUsableSize.y);
+        if (appUsableSize.getHeight() < realScreenSize.getHeight()) {
+            return new Size(appUsableSize.getWidth(), realScreenSize.getHeight() - appUsableSize.getHeight());
         }
 
         // navigation bar is not present
-        return new Point();
+        return new Size(0, 0);
     }
 
-    public static Point getScreenSize(Context context) {
+    public static Size getScreenSize(Context context) {
         return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) ? getRealScreenSize(context) : getAppUsableScreenSize(context);
     }
 
-    public static Point getAppUsableScreenSize(Context context) {
+    public static Size getAppUsableScreenSize(Context context) {
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
 
-        return size;
+        Point point = new Point();
+        display.getSize(point);
+
+        return new Size(point.x, point.y);
     }
 
-    public static Point getRealScreenSize(Context context) {
+    public static Size getRealScreenSize(Context context) {
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
-        Point size = new Point();
 
         if (Build.VERSION.SDK_INT >= 17) {
-            display.getRealSize(size);
+            Point point = new Point();
+            display.getRealSize(point);
+
+            return new Size(point.x, point.y);
         } else if (Build.VERSION.SDK_INT >= 14) {
             try {
-                size.x = (Integer) Display.class.getMethod("getRawWidth").invoke(display);
-                size.y = (Integer) Display.class.getMethod("getRawHeight").invoke(display);
+                Integer width = (Integer) Display.class.getMethod("getRawWidth").invoke(display);
+                Integer height = (Integer) Display.class.getMethod("getRawHeight").invoke(display);
+
+                return new Size(width, height);
             } catch (Exception e) {
                 if (e.getMessage() != null) {
                     Log.e(TAG, e.getMessage());
@@ -101,7 +107,7 @@ public class ScreenUtil {
             }
         }
 
-        return size;
+        return new Size(0, 0);
     }
 
 }

@@ -8,7 +8,7 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-abstract public class DaosModule {
+public class DaosModule {
 
     @Provides
     @Singleton

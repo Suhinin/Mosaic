@@ -13,6 +13,7 @@ public class LoadingPresenter implements LoadingContract.Presenter {
 
     // endregion
 
+
     // region Constructors
 
     @Inject
@@ -22,7 +23,8 @@ public class LoadingPresenter implements LoadingContract.Presenter {
 
     // endregion
 
-    // region Implements MainContract.Presenter
+
+    // region Implements LoadingContract.Presenter
 
     @Override
     public void onAttachView(LoadingContract.View view) {

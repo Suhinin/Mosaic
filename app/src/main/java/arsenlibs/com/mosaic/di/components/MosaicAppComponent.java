@@ -5,6 +5,7 @@ import javax.inject.Singleton;
 import arsenlibs.com.mosaic.app.MosaicApp;
 import arsenlibs.com.mosaic.di.modules.ActivitiesModule;
 import arsenlibs.com.mosaic.di.modules.BroadcastsModule;
+import arsenlibs.com.mosaic.di.modules.BusinessLogicsModule;
 import arsenlibs.com.mosaic.di.modules.DaosModule;
 import arsenlibs.com.mosaic.di.modules.FragmentsModule;
 import arsenlibs.com.mosaic.di.modules.MosaicAppModule;
@@ -20,6 +21,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
 @Component(modules = {
         MosaicAppModule.class,
         PresentersModule.class,
+        BusinessLogicsModule.class,
         RepositoriesModule.class,
         ServicesModule.class,
         DaosModule.class,
