@@ -12,4 +12,8 @@ public class BoardViewNull implements BoardContract.View {
         // empty stub
     }
 
+    @Override
+    public void onNextLevel() {
+        // empty stub
+    }
 }

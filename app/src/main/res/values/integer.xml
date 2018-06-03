@@ -10,7 +10,7 @@
 
     <integer name="board_fragment__palette_horizontal_margin_px">40</integer>
     <integer name="board_fragment__palette_piece_size_px">88</integer>
-    <integer name="board_fragment__palette_columns_margin_px">10</integer>
+    <integer name="board_fragment__palette_piece_margin_px">10</integer>
 
     <integer name="board_fragment__board_view_vertical_margin_px">20</integer>
     <integer name="board_fragment__board_view_grid_stoke_width_px">2</integer>

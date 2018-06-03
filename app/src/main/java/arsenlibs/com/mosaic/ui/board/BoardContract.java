@@ -10,6 +10,8 @@ public interface BoardContract {
 
         void onInitError(String message);
 
+        void onNextLevel();
+
     }
 
     interface Presenter {
@@ -21,6 +23,10 @@ public interface BoardContract {
         PalettePieceItem[] getPalette();
 
         String[][] getBoard();
+
+        void incIncorrectCount();
+
+        void levelCompleted();
 
     }
 }

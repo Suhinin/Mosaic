@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.view.View;
 
 import java.util.HashMap;
@@ -20,9 +21,9 @@ public class BoardView extends View {
 
     // region Constants
 
-    private final String ASSETS_PALETTE_FOLDER = "images/palette";
     private int GRID_COLOR = Color.GRAY;
     private int EMPTY_COLOR = -1;
+    private int CELL_DIFF = 10;
 
     // endregion
 
@@ -77,12 +78,40 @@ public class BoardView extends View {
         invalidate();
     }
 
-    public boolean checkPiece(int row, int col) {
-        return false;
+    public int getCellSize() {
+        return mCellSize;
     }
 
-    public void hookPiece(int row, int col) {
-//        cachePieceImage();
+    public PositionedPieceItem getPieceInside(Rect rect) {
+        int col = (rect.centerX() - mMargin) / mCellSize;
+        int row = (rect.centerY() - mMargin) / mCellSize;
+
+        String palettePieceId = mBoard[row][col];
+        PalettePieceItem palettePieceItem = mPalette.get(palettePieceId);
+        if (palettePieceItem == null || mCells[row][col].isPicked()) {
+            return null;
+        }
+
+        return new PositionedPieceItem(row, col, palettePieceItem);
+    }
+
+    public void hookPiece(PositionedPieceItem positionedPieceItem) {
+        mCells[positionedPieceItem.getRow()][positionedPieceItem.getCol()].setPicked(true);
+
+        invalidate();
+    }
+
+    public boolean isCompleted() {
+        for (int i=0; i<mCells.length; i++) {
+            for (int j=0; j<mCells[i].length; j++) {
+                Cell cell = mCells[i][j];
+                if (cell.isEmpty() == false && cell.isPicked() == false) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     // endregion
@@ -215,8 +244,8 @@ public class BoardView extends View {
         cachePieceImage(palettePieceId);
         Bitmap bitmap = mCachedPieceImages.get(palettePieceId);
 
-        int left = mMargin + col * mCellSize + mGridStokeWidth;
-        int top = mMargin + row * mCellSize + mGridStokeWidth;
+        int left = mMargin + col * mCellSize;
+        int top = mMargin + row * mCellSize;
 
         mCanvas.drawBitmap(bitmap, left, top, null);
     }
@@ -232,8 +261,7 @@ public class BoardView extends View {
     }
 
     private Bitmap loadCellImage(PalettePieceItem palettePieceItem) {
-        String path = ASSETS_PALETTE_FOLDER + "/" + palettePieceItem.getImagePath();
-        Bitmap bitmap = ImageLoaderHelper.loadAssets(getContext(), path, mCellSize, mCellSize);
+        Bitmap bitmap = ImageLoaderHelper.loadAssets(getContext(), palettePieceItem.getImagePath(), mCellSize, mCellSize);
         if (bitmap == null) {
             return null;
         }
