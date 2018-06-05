@@ -413,6 +413,8 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
                     }
                     return true;
                 case MotionEvent.ACTION_UP:
+                    view.setOnTouchListener(null);
+
                     Rect movedPieceRect = new Rect();
                     mMovedPiece.getGlobalVisibleRect(movedPieceRect);
                     movedPieceRect.offset(-mBoardViewMargin.getLeft(), -mBoardViewMargin.getTop());
@@ -424,6 +426,7 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
 
                             mBoardView.hookPiece(pieceInside);
                             mRootView.removeView(mMovedPiece);
+                            enableLostBeadsTouches();
 
                             if (mBoardView.isCompleted()) {
                                 mPresenter.levelCompleted();
@@ -440,7 +443,6 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
                         moveHome(mMovedPiece);
                     }
 
-                    enableLostBeadsTouches();
                     return true;
                 default:
                     return false;
@@ -458,6 +460,10 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
         }
 
         private void toBoardPieceViewSize() {
+            if (mMovedPiece.getWidth() == 0 || mMovedPiece.getHeight() == 0) {
+                return;
+            }
+
             float xScaleFactor = (float)mBoardView.getCellSize()/mMovedPiece.getWidth();
             float yScaleFactor = (float)mBoardView.getCellSize()/mMovedPiece.getHeight();
 
@@ -466,6 +472,10 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
         }
 
         private void toPalettePieceViewSize() {
+            if (mMovedPiece.getWidth() == 0 || mMovedPiece.getHeight() == 0) {
+                return;
+            }
+
             float xScaleFactor = mPalettePieceSize/mMovedPiece.getWidth();
             float yScaleFactor = mPalettePieceSize/mMovedPiece.getHeight();
 
@@ -482,6 +492,7 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
                 @Override
                 public void run() {
                     mRootView.removeView(mMovedPiece);
+                    enableLostBeadsTouches();
                 }
             });
         }
