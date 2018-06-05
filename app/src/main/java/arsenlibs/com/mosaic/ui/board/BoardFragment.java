@@ -1,5 +1,6 @@
 package arsenlibs.com.mosaic.ui.board;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.media.AudioManager;
@@ -58,10 +59,8 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
 
     private FrameLayout mRootView;
 
-    // endregion
-
-
-    // region Fields
+    private FrameLayout mPaletteContainer;
+    private BoardView mBoardView;
 
     private int mFragmentVerticalPadding;
 
@@ -73,13 +72,16 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
     private int mPalettePieceSize;
     private int mPalettePieceMargin;
 
-    private FrameLayout mPaletteContainer;
-    private BoardView mBoardView;
-
-    private List<PalettePieceItem> mPalettePieceItems;
     private Map<String, Bitmap> mCachedPieceImages;
     private List<View> mPalettePieceViews;
     private List<PalettePieceTouchListener> mPalettePieceTouchListeners;
+
+    // endregion
+
+
+    // region Fields
+
+    private BoardInteraction mInteractionListener;
 
     private SoundPool mSoundPool;
     private int mSoundCorrectChecked;
@@ -102,6 +104,17 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
 
 
     // region Implements DaggerFragment
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (context instanceof BoardInteraction) {
+            mInteractionListener = (BoardInteraction) context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement BoardInteraction");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -275,8 +288,8 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
     }
 
     @Override
-    public void onNextLevel() {
-        // TODO
+    public void onLevelCompleted() {
+        mInteractionListener.onLevelCompleted();
     }
 
     // endregion

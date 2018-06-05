@@ -11,11 +11,19 @@ import javax.inject.Inject;
 import arsenlibs.com.mosaic.R;
 import arsenlibs.com.mosaic.presenters.main.MainPresenter;
 import arsenlibs.com.mosaic.ui.board.BoardFragment;
+import arsenlibs.com.mosaic.ui.board.BoardInteraction;
 import arsenlibs.com.mosaic.ui.loading.LoadingFragment;
+import arsenlibs.com.mosaic.ui.loading.LoadingInteraction;
+import arsenlibs.com.mosaic.ui.selectlevel.SelectLevelFragment;
+import arsenlibs.com.mosaic.ui.selectlevel.SelectLevelInteraction;
 import arsenlibs.com.mosaic.utils.FragmentStack;
 import dagger.android.support.DaggerAppCompatActivity;
 
-public class MainActivity extends DaggerAppCompatActivity implements MainContract.View {
+public class MainActivity extends DaggerAppCompatActivity implements
+        MainContract.View,
+        LoadingInteraction,
+        SelectLevelInteraction,
+        BoardInteraction {
 
     // region Constants
 
@@ -49,9 +57,7 @@ public class MainActivity extends DaggerAppCompatActivity implements MainContrac
 
         mDecorView = getWindow().getDecorView();
         mFragmentStack = new FragmentStack(getSupportFragmentManager(), R.id.main_activity__fragment_container_id);
-//            mFragmentStack.replace(LoadingFragment.newInstance());
-        mFragmentStack.replace(BoardFragment.newInstance());
-
+        mFragmentStack.replace(LoadingFragment.newInstance());
     }
 
     @Override
@@ -103,15 +109,42 @@ public class MainActivity extends DaggerAppCompatActivity implements MainContrac
 
     @Override
     public void onInitError(String message) {
-        Toast.makeText(this, "onInitError: " + message, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "onLoadingError: " + message, Toast.LENGTH_LONG).show();
     }
 
     // endregion
 
 
-    // region implements Interaction Listeners
+    // region Implements Interaction Listeners
 
-    // TODO for future
+    // region Implements LoadingInteraction
+
+    @Override
+    public void onLoadingCompleted() {
+        showSelectLevel();
+    }
+
+    // endregion
+
+
+    // region Implements SelectLevelInteraction
+
+    @Override
+    public void onLevelSelected() {
+        showBoard();
+    }
+
+    // endregion
+
+
+    // region Implements BoardInteraction
+
+    @Override
+    public void onLevelCompleted() {
+        showSelectLevel();
+    }
+
+    // endregion
 
     // endregion
 
@@ -137,7 +170,13 @@ public class MainActivity extends DaggerAppCompatActivity implements MainContrac
 
     // region Private Methods
 
-    // TODO
+    private void showSelectLevel() {
+        mFragmentStack.replace(SelectLevelFragment.newInstance());
+    }
+
+    private void showBoard() {
+        mFragmentStack.push(BoardFragment.newInstance());
+    }
 
     // endregion
 

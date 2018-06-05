@@ -18,6 +18,7 @@ public class LevelsLogicStandard implements LevelsLogic {
     // region Fields
 
     private String mCurrentLevelId;
+    private long mLevelSelectedTimeMillis;
 
     // endregion
 
@@ -34,8 +35,6 @@ public class LevelsLogicStandard implements LevelsLogic {
     @Inject
     public LevelsLogicStandard(LevelsRepository levelsRepository) {
         mLevelsRepository = levelsRepository;
-
-        mCurrentLevelId = "Level1.json";     // TODO temp
     }
 
     // endregion
@@ -51,6 +50,7 @@ public class LevelsLogicStandard implements LevelsLogic {
     @Override
     public void setCurrentLevelId(String levelId) {
         mCurrentLevelId = levelId;
+        mLevelSelectedTimeMillis = System.currentTimeMillis();
     }
 
     @Override
@@ -60,6 +60,11 @@ public class LevelsLogicStandard implements LevelsLogic {
         }
 
         return mLevelsRepository.getLevel(mCurrentLevelId);
+    }
+
+    @Override
+    public long getLevelSelectedTimeMillis() {
+        return mLevelSelectedTimeMillis;
     }
 
     // endregion

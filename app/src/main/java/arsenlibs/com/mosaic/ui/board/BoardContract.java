@@ -10,7 +10,7 @@ public interface BoardContract {
 
         void onInitError(String message);
 
-        void onNextLevel();
+        void onLevelCompleted();
 
     }
 

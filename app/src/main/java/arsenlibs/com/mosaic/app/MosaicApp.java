@@ -1,6 +1,9 @@
 package arsenlibs.com.mosaic.app;
 
+import javax.inject.Inject;
+
 import arsenlibs.com.mosaic.di.components.DaggerMosaicAppComponent;
+import arsenlibs.com.mosaic.services.logger.LoggerService;
 import dagger.android.AndroidInjector;
 import dagger.android.support.DaggerApplication;
 
@@ -15,6 +18,9 @@ public class MosaicApp extends DaggerApplication {
 
     // region Injections
 
+    @Inject
+    protected LoggerService mLoggerService;
+
 //    @Inject
 //    AlarmService mAlarmService;
 //    @Inject
@@ -28,6 +34,8 @@ public class MosaicApp extends DaggerApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        mLoggerService.initCrashlitics();
 
 //        boolean isAlarmsEnabled = mSharedService.getBoolean(IS_ALARMS_ENABLED);
 //        if (isAlarmsEnabled == false) {

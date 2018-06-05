@@ -43,8 +43,6 @@ public class LevelsRepositoryStandard implements LevelsRepository {
     public LevelsRepositoryStandard(LevelsDao levelsDao, LevelBuilder levelBuilder) {
         mLevelsDao = levelsDao;
         mLevelBuilder = levelBuilder;
-
-        loadLevels();           // TODO temp. Must be moved to loading fragment
     }
 
     // endregion
@@ -60,11 +58,7 @@ public class LevelsRepositoryStandard implements LevelsRepository {
 
     @Override
     public Level[] getLevels() {
-        Level[] levels = mLevels.values().toArray(new Level[0]);
-
-        Arrays.sort(levels, new LevelsComparator());
-
-        return levels;
+        return mLevels.values().toArray(new Level[0]);
     }
 
     @Override
@@ -142,20 +136,5 @@ public class LevelsRepositoryStandard implements LevelsRepository {
     }
 
     // endregion
-
-
-    // region Inner Classes
-
-    public static class LevelsComparator implements Comparator<Level> {
-
-        @Override
-        public int compare(Level l1, Level l2) {
-            return l1.getNumber() - l2.getNumber();
-        }
-
-    }
-
-    // endregion
-
 
 }

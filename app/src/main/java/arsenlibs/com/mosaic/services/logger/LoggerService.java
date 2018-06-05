@@ -3,6 +3,8 @@ package arsenlibs.com.mosaic.services.logger;
 
 public interface LoggerService {
 
+    void initCrashlitics();
+
 //    void startLevel(LevelType levelType);
 //
 //    void winLevel(LevelType levelType, int scores);

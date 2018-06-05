@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- region common -->
+
     <integer name="frame_width_px">1280</integer>
     <integer name="frame_height_px">720</integer>
+
+    <!-- endregion -->
+
+
+    <!-- region SelectLevel -->
+
+    <integer name="select_level_fragment__margin_px">20</integer>
+    <integer name="select_level_fragment__grid_margin_px">30</integer>
+
+    <!-- endregion -->
 
     <!-- region BoardFragment -->
 

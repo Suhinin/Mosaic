@@ -10,4 +10,5 @@ public interface LevelsLogic {
 
     Level getCurrentLevel();
 
+    long getLevelSelectedTimeMillis();
 }

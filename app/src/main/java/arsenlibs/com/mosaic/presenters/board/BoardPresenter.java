@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.util.Log;
 
-import java.util.Arrays;
-
 import javax.inject.Inject;
 
 import arsenlibs.com.mosaic.businesslogics.LevelsLogic;
@@ -37,6 +35,8 @@ public class BoardPresenter implements BoardContract.Presenter {
     private BoardContract.View mView;
 
     private Level mLevel;
+    private long mLevelRequestTimeMillis;
+
     private InitState mInitState;
     private String mInitErrorMsg;
 
@@ -81,7 +81,7 @@ public class BoardPresenter implements BoardContract.Presenter {
     public void onAttachView(BoardContract.View view) {
         mView = view;
 
-        if (mInitState == InitState.NONE) {
+        if (mInitState == InitState.NONE || needRequestLevel()) {
             startInitTask();
         }
 
@@ -96,11 +96,19 @@ public class BoardPresenter implements BoardContract.Presenter {
 
     @Override
     public PalettePieceItem[] getPalette() {
+        if (needRequestLevel()) {
+            return  new PalettePieceItem[0];
+        }
+
         return mPalette;
     }
 
     @Override
     public String[][] getBoard() {
+        if (needRequestLevel()) {
+            return new String[0][];
+        }
+
         return mBoard;
     }
 
@@ -154,6 +162,8 @@ public class BoardPresenter implements BoardContract.Presenter {
         mLevel = mLevelsLogic.getCurrentLevel();
         mBoard = mLevel.getBoard();
         createPalette(mLevel.getPalette());
+
+        mLevelRequestTimeMillis = System.currentTimeMillis();
     }
 
     private void createPalette(PalettePiece[] palettePieces) {
@@ -186,7 +196,7 @@ public class BoardPresenter implements BoardContract.Presenter {
     private Runnable mNextLevelRunnable = new Runnable() {
         @Override
         public void run() {
-            mView.onNextLevel();
+            mView.onLevelCompleted();
         }
     };
 
@@ -224,6 +234,10 @@ public class BoardPresenter implements BoardContract.Presenter {
             case 2: return LevelState.TWO_STARS;
             case 3: return LevelState.THREE_STARS;
         }
+    }
+
+    private boolean needRequestLevel() {
+        return mLevelsLogic.getLevelSelectedTimeMillis() > mLevelRequestTimeMillis;
     }
 
     // endregion

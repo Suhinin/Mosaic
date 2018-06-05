@@ -1,15 +1,16 @@
 package arsenlibs.com.mosaic.ui.loading;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import javax.inject.Inject;
 
-import arsenlibs.com.mosaic.presenters.loading.LoadingPresenter;
 import arsenlibs.com.mosaic.services.imageloader.ImageLoaderService;
 import arsenlibs.com.mosaic.utils.LayoutHelper;
 import arsenlibs.com.mosaic.utils.ScreenUtil;
@@ -27,9 +28,16 @@ public class LoadingFragment extends DaggerFragment implements LoadingContract.V
     // region Injections
 
     @Inject
-    protected LoadingPresenter mPresenter;
+    protected LoadingContract.Presenter mPresenter;
     @Inject
     protected ImageLoaderService mImageLoaderService;
+
+    // endregion
+
+
+    // region Fields
+
+    private LoadingInteraction mInteractionListener;
 
     // endregion
 
@@ -58,6 +66,17 @@ public class LoadingFragment extends DaggerFragment implements LoadingContract.V
     // region Implements DaggerFragment
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (context instanceof LoadingInteraction) {
+            mInteractionListener = (LoadingInteraction) context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement LoadingInteraction");
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return createView();
     }
@@ -74,6 +93,28 @@ public class LoadingFragment extends DaggerFragment implements LoadingContract.V
         super.onPause();
 
         mPresenter.onDetachView();
+    }
+
+    // endregion
+
+
+    // region Implements LoadingContract.View
+
+    @Override
+    public void onStartLoading() {
+        // TODO show progress bar
+    }
+
+    @Override
+    public void onLoadingComplete() {
+        // TODO stop progress bar
+        mInteractionListener.onLoadingCompleted();
+    }
+
+    @Override
+    public void onLoadingError(String message) {
+        // TODO stop progress bar
+        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
     }
 
     // endregion

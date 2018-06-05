@@ -12,10 +12,16 @@ import io.fabric.sdk.android.Fabric;
 
 public class LoggerFabric implements LoggerService {
 
+    private Context mContext;
+
     @Inject
     public LoggerFabric(Context context) {
+        mContext = context;
+    }
 
-        Fabric fabric = new Fabric.Builder(context)
+    @Override
+    public void initCrashlitics() {
+        Fabric fabric = new Fabric.Builder(mContext)
                 .kits(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build(), new Answers())
                 .debuggable(true)
                 .build();

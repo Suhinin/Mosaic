@@ -23,7 +23,6 @@ public class BoardView extends View {
 
     private int GRID_COLOR = Color.GRAY;
     private int EMPTY_COLOR = -1;
-    private int CELL_DIFF = 10;
 
     // endregion
 
@@ -84,7 +83,14 @@ public class BoardView extends View {
 
     public PositionedPieceItem getPieceInside(Rect rect) {
         int col = (rect.centerX() - mMargin) / mCellSize;
+        if (col < 0 || col > mBoard.length) {
+            return null;
+        }
+
         int row = (rect.centerY() - mMargin) / mCellSize;
+        if (row < 0 || row > mBoard[0].length) {
+            return null;
+        }
 
         String palettePieceId = mBoard[row][col];
         PalettePieceItem palettePieceItem = mPalette.get(palettePieceId);
