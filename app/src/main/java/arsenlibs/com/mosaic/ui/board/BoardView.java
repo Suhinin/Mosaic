@@ -82,13 +82,13 @@ public class BoardView extends View {
     }
 
     public PositionedPieceItem getPieceInside(Rect rect) {
-        int col = (rect.centerX() - mMargin) / mCellSize;
-        if (col < 0 || col > mBoard.length) {
+        int row = (rect.centerY() - mMargin) / mCellSize;
+        if (row < 0 || row >= mBoard.length) {
             return null;
         }
 
-        int row = (rect.centerY() - mMargin) / mCellSize;
-        if (row < 0 || row > mBoard[0].length) {
+        int col = (rect.centerX() - mMargin) / mCellSize;
+        if (col < 0 || col >= mBoard[0].length) {
             return null;
         }
 

@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- region SelectLevelFragment -->
 
+    <dimen name="select_level_fragment__margin">10dp</dimen>
+    <dimen name="select_level_fragment__grid_margin">15dp</dimen>
+
+    <!-- endregion -->
+
+
+    <!-- region BoardFragment -->
+
+    <dimen name="board_fragment__vertical_margin">20dp</dimen>
+
+    <!-- endregion -->
 
 </resources>

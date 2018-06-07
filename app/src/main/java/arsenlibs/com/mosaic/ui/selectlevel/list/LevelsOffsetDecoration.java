@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import arsenlibs.com.mosaic.R;
-import arsenlibs.com.mosaic.utils.ScreenUtil;
 
 public class LevelsOffsetDecoration extends RecyclerView.ItemDecoration {
 
@@ -15,11 +14,8 @@ public class LevelsOffsetDecoration extends RecyclerView.ItemDecoration {
     private int mSpanCount;
 
     public LevelsOffsetDecoration(Context context, int spanCount) {
-        int fragmentMarginPx = context.getResources().getInteger(R.integer.select_level_fragment__margin_px);
-        mFragmentMargin = ScreenUtil.getScreenY(context, fragmentMarginPx);
-
-        int gridSpacePx = context.getResources().getInteger(R.integer.select_level_fragment__grid_margin_px);
-        mGridSpace = ScreenUtil.getScreenY(context, gridSpacePx);
+        mFragmentMargin = (int) context.getResources().getDimension(R.dimen.select_level_fragment__margin);
+        mGridSpace = (int) context.getResources().getDimension(R.dimen.select_level_fragment__grid_margin);
 
         mSpanCount = spanCount;
     }

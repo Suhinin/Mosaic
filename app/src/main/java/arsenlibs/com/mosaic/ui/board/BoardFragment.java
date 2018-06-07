@@ -162,8 +162,7 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
     }
 
     private void calculateFragmentVerticalPadding() {
-        int paddingPx = getResources().getInteger(R.integer.board_fragment__vertical_margin_px);
-        mFragmentVerticalPadding = ScreenUtil.getScreenY(getContext(), paddingPx);
+        mFragmentVerticalPadding = (int) getResources().getDimension(R.dimen.board_fragment__vertical_margin);
     }
 
     private void calculatePaletteSize() {

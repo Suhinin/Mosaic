@@ -9,16 +9,7 @@
     <!-- endregion -->
 
 
-    <!-- region SelectLevel -->
-
-    <integer name="select_level_fragment__margin_px">20</integer>
-    <integer name="select_level_fragment__grid_margin_px">30</integer>
-
-    <!-- endregion -->
-
     <!-- region BoardFragment -->
-
-    <integer name="board_fragment__vertical_margin_px">20</integer>
 
     <integer name="board_fragment__palette_horizontal_margin_px">40</integer>
     <integer name="board_fragment__palette_piece_size_px">88</integer>

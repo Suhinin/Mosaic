@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -156,7 +157,7 @@ public class SelectLevelFragment extends DaggerFragment implements SelectLevelCo
     }
 
     private void addLevelsList() {
-        mLevelsAdapter = new LevelsAdapter(mLevelClickHandler);
+        mLevelsAdapter = new LevelsAdapter(getContext(), mLevelClickHandler);
 
         initGridLayoutManager();
         addLevelsListView();
@@ -181,7 +182,7 @@ public class SelectLevelFragment extends DaggerFragment implements SelectLevelCo
             }
         });
 
-        mRootView.addView(mRecyclerView);
+        mRootView.addView(mRecyclerView, LayoutHelper.createFramePx(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
     }
 
     private void initSnapHelper() {

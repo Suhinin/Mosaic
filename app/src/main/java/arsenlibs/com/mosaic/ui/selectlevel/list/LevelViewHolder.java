@@ -25,7 +25,6 @@ class LevelViewHolder extends RecyclerView.ViewHolder {
 
     public void bind(LevelAdapterModel adapterModel) {
         mLevelItemView.setPreview(adapterModel.getPreviewPath());
-        mLevelItemView.setNumber(adapterModel.getNumber());
     }
 
 }

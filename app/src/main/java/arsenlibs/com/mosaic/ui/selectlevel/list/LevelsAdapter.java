@@ -1,5 +1,6 @@
 package arsenlibs.com.mosaic.ui.selectlevel.list;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
@@ -9,8 +10,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import arsenlibs.com.mosaic.R;
 import arsenlibs.com.mosaic.presenters.selectlevel.LevelItem;
-import arsenlibs.com.mosaic.utils.LayoutHelper;
+import arsenlibs.com.mosaic.ui.common.Size;
+import arsenlibs.com.mosaic.utils.ScreenUtil;
 
 public class LevelsAdapter extends RecyclerView.Adapter<LevelViewHolder> {
 
@@ -18,26 +21,35 @@ public class LevelsAdapter extends RecyclerView.Adapter<LevelViewHolder> {
 
     private final String TAG = LevelsAdapter.class.getCanonicalName();
 
+    private final int SCREEN_COLUMN_COUNT = 3;
+    private final int SCREEN_ROW_COUNT = 2;
+
     // endregion
 
 
     // region Fields
 
+    private Context mContext;
+
     private List<LevelAdapterModel> mItems;
     private List<LevelItem> mModelItems;
 
     private LevelClickHandler mItemClickHandler;
+    private Size mItemSize;
 
     // endregion
 
 
     // region Constructors
 
-    public LevelsAdapter(LevelClickHandler itemClickHandler) {
+    public LevelsAdapter(Context context, LevelClickHandler itemClickHandler) {
+        mContext = context;
         mItemClickHandler = itemClickHandler;
 
         mItems = new ArrayList<>();
         mModelItems = new ArrayList<>();
+
+        calcItemSize();
     }
 
     // endregion
@@ -48,7 +60,8 @@ public class LevelsAdapter extends RecyclerView.Adapter<LevelViewHolder> {
     @NonNull
     @Override
     public LevelViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LevelItemView view = new LevelItemView(parent.getContext());
+        LevelItemView view = new LevelItemView(parent.getContext(), mItemSize);
+
         return new LevelViewHolder(view, mItemClickHandler);
     }
 
@@ -102,23 +115,21 @@ public class LevelsAdapter extends RecyclerView.Adapter<LevelViewHolder> {
         return RecyclerView.NO_POSITION;
     }
 
-    public void removeItem (int position) throws IndexOutOfBoundsException {
-        mItems.remove(position);
-        mModelItems.remove(position);
-        notifyItemRemoved(position);
-    }
-
-    public void clear() {
-        mItems.clear();
-        mModelItems.clear();
-        notifyDataSetChanged();
-    }
-
     // endregion
 
 
     // region Private Methods
 
+    private void calcItemSize() {
+        int fragmentMargin = (int) mContext.getResources().getDimension(R.dimen.select_level_fragment__margin);
+        int gridMargin = (int) mContext.getResources().getDimension(R.dimen.select_level_fragment__grid_margin);
+
+        Size screenSize = ScreenUtil.getScreenSize(mContext);
+        int width = (screenSize.getWidth() - 2*fragmentMargin - (SCREEN_COLUMN_COUNT -1)*gridMargin) / SCREEN_COLUMN_COUNT;
+        int height = (screenSize.getHeight() - 2*fragmentMargin - (SCREEN_ROW_COUNT -1)*gridMargin) / SCREEN_ROW_COUNT;
+
+        mItemSize = new Size(width, height);
+    }
 
     // endregion
 
