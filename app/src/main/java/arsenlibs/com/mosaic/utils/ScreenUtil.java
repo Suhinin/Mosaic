@@ -15,44 +15,6 @@ public class ScreenUtil {
 
     private static final String TAG = ScreenUtil.class.getCanonicalName();
 
-    public static int getScreenX(Context context, int frameX) {
-        int screenWidth = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) ? getRealScreenSize(context).getWidth() : getAppUsableScreenSize(context).getWidth();
-        int frameWidth = context.getResources().getInteger(R.integer.frame_width_px);
-
-        return getScreenX(frameX, frameWidth, screenWidth);
-    }
-
-    public static int getScreenX(int frameX, int frameWidth, int screenWidth) {
-        float y = screenWidth * frameX / frameWidth;
-
-        return (int)y;
-    }
-
-    public static int getScreenY(Context context, int frameY) {
-        int screenHeight = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) ? getRealScreenSize(context).getHeight() : getAppUsableScreenSize(context).getHeight();
-        int frameHeight = context.getResources().getInteger(R.integer.frame_height_px);
-
-        return getScreenY(frameY, frameHeight, screenHeight);
-    }
-
-    public static int getScreenY(int frameY, int frameHeight, int screenHeight) {
-        float height = screenHeight * frameY / frameHeight;
-
-        return (int)height;
-    }
-
-    public static int getFrameX(int screenX, int frameWidth, int screenWidth) {
-        float x = frameWidth * screenX / screenWidth;
-
-        return (int)x;
-    }
-
-    public static int getFrameY(int screenY, int frameHeight, int screenHeight) {
-        float y = frameHeight * screenY / screenHeight;
-
-        return (int)y;
-    }
-
     public static Size getNavigationBarSize(Context context) {
         Size appUsableSize = getAppUsableScreenSize(context);
         Size realScreenSize = getRealScreenSize(context);

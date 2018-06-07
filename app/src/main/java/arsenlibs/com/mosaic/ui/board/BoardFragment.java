@@ -166,11 +166,8 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
     }
 
     private void calculatePaletteSize() {
-        int pieceSizePx = getResources().getInteger(R.integer.board_fragment__palette_piece_size_px);
-        mPalettePieceSize = ScreenUtil.getScreenX(getContext(), pieceSizePx);
-
-        int pieceMarginPx = getResources().getInteger(R.integer.board_fragment__palette_piece_margin_px);
-        mPalettePieceMargin = ScreenUtil.getScreenX(getContext(), pieceMarginPx);
+        mPalettePieceSize = (int) getResources().getDimension(R.dimen.board_fragment__palette_piece_size);
+        mPalettePieceMargin = (int) getResources().getDimension(R.dimen.board_fragment__palette_piece_margin);
 
         int width = mPalettePieceSize*PALETTE_COLUMNS_COUNT + (PALETTE_COLUMNS_COUNT+1)* mPalettePieceMargin;
 
@@ -181,8 +178,7 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
     }
 
     private void calcPaletteViewMargin() {
-        int marginPx = getResources().getInteger(R.integer.board_fragment__palette_horizontal_margin_px);
-        int margin = ScreenUtil.getScreenX(getContext(), marginPx);
+        int margin = (int) getResources().getDimension(R.dimen.board_fragment__palette_horizontal_margin);
 
         mPaletteContainerMargin = new Margin(margin, mFragmentVerticalPadding, margin, mFragmentVerticalPadding);
     }
@@ -307,8 +303,7 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
     }
 
     private void calcBoardViewSize() {
-        int boardPaddingPx = getResources().getInteger(R.integer.board_fragment__board_view_vertical_margin_px);
-        int boardPadding =  ScreenUtil.getScreenY(getContext(), boardPaddingPx);
+        int boardPadding = (int) getResources().getDimension(R.dimen.board_fragment__board_view_vertical_margin);
 
         int rows = mPresenter.getBoard().length;
         int cols = mPresenter.getBoard().length > 0 ? mPresenter.getBoard()[0].length : 0;

@@ -151,11 +151,8 @@ public class BoardView extends View {
     }
 
     private void initStokes() {
-        int gridStokeWidthPx = getResources().getInteger(R.integer.board_fragment__board_view_grid_stoke_width_px);
-        mGridStokeWidth =  ScreenUtil.getScreenX(getContext(), gridStokeWidthPx);
-
-        int coloredStokeWidthPx = getResources().getInteger(R.integer.board_fragment__board_view_colored_stoke_width_px);
-        mColoredStokeWidth =  ScreenUtil.getScreenX(getContext(), coloredStokeWidthPx);
+        mGridStokeWidth = (int) getResources().getDimension(R.dimen.board_fragment__board_view_grid_stoke_width);
+        mColoredStokeWidth = (int) getResources().getDimension(R.dimen.board_fragment__board_view_colored_stoke_width);
     }
 
     private void createPalette(PalettePieceItem[] palette) {
@@ -276,8 +273,7 @@ public class BoardView extends View {
     }
 
     private void initVerticalMargin() {
-        int marginPx = getResources().getInteger(R.integer.board_fragment__board_view_vertical_margin_px);
-        mMargin =  ScreenUtil.getScreenY(getContext(), marginPx);
+        mMargin = (int) getResources().getDimension(R.dimen.board_fragment__board_view_vertical_margin);
     }
 
     private void calcCellSize() {
