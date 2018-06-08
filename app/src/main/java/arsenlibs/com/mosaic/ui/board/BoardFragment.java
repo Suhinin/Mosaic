@@ -1,6 +1,7 @@
 package arsenlibs.com.mosaic.ui.board;
 
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.media.AudioManager;
@@ -25,6 +26,7 @@ import javax.inject.Inject;
 import arsenlibs.com.mosaic.R;
 import arsenlibs.com.mosaic.presenters.board.BoardPresenter;
 import arsenlibs.com.mosaic.presenters.board.PalettePieceItem;
+import arsenlibs.com.mosaic.services.assets.AssetsService;
 import arsenlibs.com.mosaic.services.imageloader.ImageLoaderService;
 import arsenlibs.com.mosaic.ui.common.Margin;
 import arsenlibs.com.mosaic.ui.common.Size;
@@ -51,6 +53,8 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
     protected BoardPresenter mPresenter;
     @Inject
     protected ImageLoaderService mImageLoaderService;
+    @Inject
+    protected AssetsService mAssetsService;
 
     // endregion
 
@@ -85,6 +89,8 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
 
     private SoundPool mSoundPool;
     private int mSoundCorrectChecked;
+    private int mSoundIncorrectChecked;
+    private int mSoundLevelComplete;
 
     // endregion
 
@@ -351,7 +357,18 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
     private void initSoundPool() {
         mSoundPool = new SoundPool(3, AudioManager.STREAM_MUSIC, 0);
 
-//        mSoundCorrectChecked = mSoundPool.load(getContext(), R.raw.sound_professions_correct_checked, 1);
+        mSoundCorrectChecked = loadSound("sounds/board/попадение в точку.wav");
+        mSoundIncorrectChecked = loadSound("sounds/board/Phazed bang.wav");
+        mSoundLevelComplete = loadSound("sounds/board/level_complete.wav");
+    }
+
+    private int loadSound(String fileName) {
+        AssetFileDescriptor fileDescriptor = mAssetsService.getFileDescriptor(fileName);
+        if (fileDescriptor == null) {
+            return 0;
+        }
+
+        return mSoundPool.load(fileDescriptor, 1);
     }
 
     private void playSound(int soundId) {
@@ -416,24 +433,22 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
                     PositionedPieceItem pieceInside = mBoardView.getPieceInside(movedPieceRect);
                     if (pieceInside != null) {
                         if (pieceInside.getColor() == mPalettePieceItem.getColor()) {
-//                            playSound(mSoundCorrectChecked);
+                            playSound(mSoundCorrectChecked);
 
                             mBoardView.hookPiece(pieceInside);
                             mRootView.removeView(mMovedPiece);
                             enableLostBeadsTouches();
 
                             if (mBoardView.isCompleted()) {
+                                playSound(mSoundLevelComplete);
                                 mPresenter.levelCompleted();
-//                                playSound(getCorrectSound());
                             }
                         } else {
                             mPresenter.incIncorrectCount();
-//                            int incorrectSound = getWrongSoundId();
-//                            playSound(incorrectSound);
+                            playSound(mSoundIncorrectChecked);
                             moveHome(mMovedPiece);
                         }
                     } else {
-//                        playSound(R.raw.ball_back);
                         moveHome(mMovedPiece);
                     }
 

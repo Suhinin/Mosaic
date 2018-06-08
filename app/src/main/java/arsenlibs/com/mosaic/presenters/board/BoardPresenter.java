@@ -120,7 +120,7 @@ public class BoardPresenter implements BoardContract.Presenter {
     @Override
     public void levelCompleted() {
         saveLevelState();
-        mNextLevelHandler.postDelayed(mNextLevelRunnable, 1000);
+        mNextLevelHandler.postDelayed(mNextLevelRunnable, 4000);
     }
 
     // endregion
