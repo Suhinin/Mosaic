@@ -2,15 +2,12 @@ package com.childaplic.mosaic.ui.selectlevel;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,15 +15,17 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import javax.inject.Inject;
-
 import com.childaplic.mosaic.presenters.selectlevel.LevelItem;
 import com.childaplic.mosaic.services.imageloader.ImageLoaderService;
+import com.childaplic.mosaic.services.shared.SharedService;
 import com.childaplic.mosaic.ui.selectlevel.list.LevelClickHandler;
 import com.childaplic.mosaic.ui.selectlevel.list.LevelsAdapter;
 import com.childaplic.mosaic.ui.selectlevel.list.LevelsOffsetDecoration;
 import com.childaplic.mosaic.utils.LayoutHelper;
 import com.childaplic.mosaic.utils.ScreenUtil;
+
+import javax.inject.Inject;
+
 import dagger.android.support.DaggerFragment;
 
 public class SelectLevelFragment extends DaggerFragment implements SelectLevelContract.View {
@@ -36,6 +35,7 @@ public class SelectLevelFragment extends DaggerFragment implements SelectLevelCo
     private final String ASSETS_BACKGROUND = "images/board/bg_board.png";
 
     private final int GRID_ROWS_COUNT = 2;
+    private final String SHARED__FIRST_VISIBLE_LIST_POSITION = "shared__first_visible_list_position";
 
     // endregion
 
@@ -46,6 +46,8 @@ public class SelectLevelFragment extends DaggerFragment implements SelectLevelCo
     protected SelectLevelContract.Presenter mPresenter;
     @Inject
     protected ImageLoaderService mImageLoaderService;
+    @Inject
+    protected SharedService mSharedService;
 
     // endregion
 
@@ -88,6 +90,8 @@ public class SelectLevelFragment extends DaggerFragment implements SelectLevelCo
     public void onAttach(Context context) {
         super.onAttach(context);
 
+        mSharedService.remove(SHARED__FIRST_VISIBLE_LIST_POSITION);
+
         if (context instanceof SelectLevelInteraction) {
             mInteractionListener = (SelectLevelInteraction) context;
         } else {
@@ -111,6 +115,7 @@ public class SelectLevelFragment extends DaggerFragment implements SelectLevelCo
     public void onPause() {
         super.onPause();
 
+        saveListScrollState();
         mPresenter.onDetachView();
     }
 
@@ -122,7 +127,7 @@ public class SelectLevelFragment extends DaggerFragment implements SelectLevelCo
     @Override
     public void onInit() {
         updateList();
-        scrollToCurrentLevel();
+        restoreListScrollState();
     }
 
     @Override
@@ -141,7 +146,7 @@ public class SelectLevelFragment extends DaggerFragment implements SelectLevelCo
         addBackground();
         addLevelsList();
         updateList();
-        scrollToCurrentLevel();
+        restoreListScrollState();
 
         return mRootView;
     }
@@ -200,22 +205,16 @@ public class SelectLevelFragment extends DaggerFragment implements SelectLevelCo
         mLevelsAdapter.updateItems(levelItems);
     }
 
-    private void scrollToCurrentLevel() {
-        LevelItem levelItem = mPresenter.getVisibleLevel();
-        if (levelItem == null) {
-            return;
+    private void restoreListScrollState() {
+        int position = mSharedService.getInt(SHARED__FIRST_VISIBLE_LIST_POSITION, RecyclerView.NO_POSITION);
+        if (position != RecyclerView.NO_POSITION && mLevelsAdapter.getItemCount() > 0) {
+            mGridLayoutManager.scrollToPosition(position);
         }
+    }
 
-        int position = mLevelsAdapter.getItemPosition(levelItem);
-        if (position == RecyclerView.NO_POSITION) {
-            return;
-        }
-
-        if (position > 2) {
-            position -= 2;          // centered
-        }
-
-        mGridLayoutManager.scrollToPosition(position);
+    private void saveListScrollState() {
+        int position = mGridLayoutManager.findFirstCompletelyVisibleItemPosition();
+        mSharedService.putInt(SHARED__FIRST_VISIBLE_LIST_POSITION, position);
     }
 
     // endregion

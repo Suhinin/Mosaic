@@ -6,9 +6,9 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 105
-        versionName "1.0.5"
-        resValue "integer", "database_version", "2"
+        versionCode 106
+        versionName "1.0.6"
+        resValue "integer", "database_version", "3"
         resValue "string", "advertising__admob_app_id", "ca-app-pub-2782764292160236~1266306212"
         resValue "string", "advertising__ad_unit_id", "ca-app-pub-2782764292160236/5752346139"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -80,7 +80,7 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.1.0'
 
-    implementation 'com.google.android.gms:play-services-ads:15.0.0'
+    implementation 'com.google.android.gms:play-services-ads:15.0.1'
 
     implementation('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;

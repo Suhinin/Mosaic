@@ -23,6 +23,8 @@ public interface Level {
 
     PalettePiece[] getPalette();
 
-    String[][] getBoard();
+    Cell[][] getBoard();
+
+    void setBoard(Cell[][] board);
 
 }

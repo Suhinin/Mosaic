@@ -7,6 +7,8 @@ public interface LevelsRepository {
 
     void loadLevels();
 
+    Level resetLevel(String id);
+
     Level[] getLevels();
 
     Level getLevel(String id);

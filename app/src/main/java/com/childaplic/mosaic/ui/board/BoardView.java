@@ -12,10 +12,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.childaplic.mosaic.R;
+import com.childaplic.mosaic.presenters.board.CellItem;
 import com.childaplic.mosaic.presenters.board.PalettePieceItem;
 import com.childaplic.mosaic.repositories.levels.domain.LevelData;
 import com.childaplic.mosaic.utils.ImageLoaderHelper;
-import com.childaplic.mosaic.utils.ScreenUtil;
 
 public class BoardView extends View {
 
@@ -33,9 +33,9 @@ public class BoardView extends View {
 
     private int mRows;
     private int mCols;
-    private String[][] mBoard;
+    private CellItem[][] mBoard;
 
-    private Cell[][] mCells;
+    private CellView[][] mCellViews;
     private Map<String, Bitmap> mCachedPieceImages;
 
     private int mGridStokeWidth;
@@ -65,7 +65,7 @@ public class BoardView extends View {
 
     // region Public Methods
 
-    public void init(PalettePieceItem[] palette, String[][] board) {
+    public void init(PalettePieceItem[] palette, CellItem[][] board) {
         createPalette(palette);
 
         mRows = board.length;
@@ -92,9 +92,9 @@ public class BoardView extends View {
             return null;
         }
 
-        String palettePieceId = mBoard[row][col];
+        String palettePieceId = mBoard[row][col].getPieceId();
         PalettePieceItem palettePieceItem = mPalette.get(palettePieceId);
-        if (palettePieceItem == null || mCells[row][col].isPicked()) {
+        if (palettePieceItem == null || mCellViews[row][col].isPicked()) {
             return null;
         }
 
@@ -102,16 +102,16 @@ public class BoardView extends View {
     }
 
     public void hookPiece(PositionedPieceItem positionedPieceItem) {
-        mCells[positionedPieceItem.getRow()][positionedPieceItem.getCol()].setPicked(true);
+        mCellViews[positionedPieceItem.getRow()][positionedPieceItem.getCol()].setPicked(true);
 
         invalidate();
     }
 
     public boolean isCompleted() {
-        for (int i=0; i<mCells.length; i++) {
-            for (int j=0; j<mCells[i].length; j++) {
-                Cell cell = mCells[i][j];
-                if (cell.isEmpty() == false && cell.isPicked() == false) {
+        for (int i = 0; i< mCellViews.length; i++) {
+            for (int j = 0; j< mCellViews[i].length; j++) {
+                CellView cellView = mCellViews[i][j];
+                if (cellView.isEmpty() == false && cellView.isPicked() == false) {
                     return false;
                 }
             }
@@ -163,7 +163,7 @@ public class BoardView extends View {
     }
 
     private void initBoardCells() {
-        mCells = new Cell[mRows][mCols];
+        mCellViews = new CellView[mRows][mCols];
 
         for (int i=0; i<mRows; i++) {
             for (int j=0; j<mCols; j++) {
@@ -173,20 +173,27 @@ public class BoardView extends View {
     }
 
     private void addCell(int row, int col) {
-        if (mBoard[row][col].equals(LevelData.EMPTY_CELL)) {
-            mCells[row][col] = createEmptyCell();
+        if (mBoard[row][col].isEmpty()) {
+            mCellViews[row][col] = createEmptyCell();
+        } else if (mBoard[row][col].isPicked()) {
+            mCellViews[row][col] = createPickedCell(mBoard[row][col].getPieceId());
         } else {
-            mCells[row][col] = createColoredCell(mBoard[row][col]);
+            mCellViews[row][col] = createColoredCell(mBoard[row][col].getPieceId());
         }
     }
 
-    private Cell createEmptyCell() {
-        return new Cell();
+    private CellView createEmptyCell() {
+        return new CellView();
     }
 
-    private Cell createColoredCell(String palettePieceId) {
+    private CellView createPickedCell(String palettePieceId) {
         PalettePieceItem palettePieceItem = mPalette.get(palettePieceId);
-        return new Cell(palettePieceItem.getColor());
+        return new CellView(palettePieceItem.getColor(), true);
+    }
+
+    private CellView createColoredCell(String palettePieceId) {
+        PalettePieceItem palettePieceItem = mPalette.get(palettePieceId);
+        return new CellView(palettePieceItem.getColor());
     }
 
     private void drawBackground() {
@@ -202,13 +209,13 @@ public class BoardView extends View {
     }
 
     private void drawCell(int row, int col) {
-        Cell cell = mCells[row][col];
-        if (cell.isEmpty()) {
+        CellView cellView = mCellViews[row][col];
+        if (cellView.isEmpty()) {
             drawEmptyCell(row, col);
-        } else if (cell.isPicked()) {
+        } else if (cellView.isPicked()) {
             drawPickedCell(row, col);
         } else {
-            drawColoredCell(cell, row, col);
+            drawColoredCell(cellView, row, col);
         }
     }
 
@@ -224,10 +231,10 @@ public class BoardView extends View {
         mCanvas.drawRect(left, top, right, bottom, mCellPaint);
     }
 
-    private void drawColoredCell(Cell cell, int row, int col) {
+    private void drawColoredCell(CellView cellView, int row, int col) {
         drawEmptyCell(row, col);
 
-        mCellPaint.setColor(cell.getColor());
+        mCellPaint.setColor(cellView.getColor());
         mCellPaint.setStrokeWidth(mColoredStokeWidth);
 
         float shift = mGridStokeWidth + mColoredStokeWidth/2f;
@@ -243,7 +250,7 @@ public class BoardView extends View {
     private void drawPickedCell(int row, int col) {
         drawEmptyCell(row, col);
 
-        String palettePieceId = mBoard[row][col];
+        String palettePieceId = mBoard[row][col].getPieceId();
         cachePieceImage(palettePieceId);
         Bitmap bitmap = mCachedPieceImages.get(palettePieceId);
 
@@ -286,28 +293,28 @@ public class BoardView extends View {
 
     // region Nested Classes
 
-    private class Cell {
+    private class CellView {
         private int mColor;
         private boolean mIsPicked;
         private boolean mIsEmpty;
 
 
-        public Cell() {
+        CellView() {
             mColor = EMPTY_COLOR;
             mIsPicked = false;
             mIsEmpty = true;
         }
 
-        public Cell(int color) {
+        CellView(int color) {
             mColor = color;
             mIsPicked = false;
             mIsEmpty = false;
         }
 
-        public Cell(int color, boolean isPicked, boolean isEmpty) {
+        CellView(int color, boolean isPicked) {
             mColor = color;
             mIsPicked = isPicked;
-            mIsPicked = isEmpty;
+            mIsEmpty = false;
         }
 
         public int getColor() {

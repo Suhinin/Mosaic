@@ -1,6 +1,5 @@
 package com.childaplic.mosaic.ui.selectlevel;
 
-import java.util.Collection;
 
 import com.childaplic.mosaic.presenters.selectlevel.LevelItem;
 
@@ -20,8 +19,6 @@ public interface SelectLevelContract {
 
         LevelItem[] getLevels();
         void selectLevel(LevelItem levelItem);
-
-        LevelItem getVisibleLevel();
 
     }
 

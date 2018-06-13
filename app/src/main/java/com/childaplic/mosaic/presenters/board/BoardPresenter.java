@@ -8,11 +8,13 @@ import javax.inject.Inject;
 
 import com.childaplic.mosaic.businesslogics.LevelsLogic;
 import com.childaplic.mosaic.repositories.levels.LevelsRepository;
+import com.childaplic.mosaic.repositories.levels.domain.Cell;
 import com.childaplic.mosaic.repositories.levels.domain.Level;
 import com.childaplic.mosaic.repositories.levels.domain.LevelState;
 import com.childaplic.mosaic.repositories.levels.domain.PalettePiece;
 import com.childaplic.mosaic.ui.board.BoardContract;
 import com.childaplic.mosaic.ui.board.BoardViewNull;
+
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
@@ -41,7 +43,7 @@ public class BoardPresenter implements BoardContract.Presenter {
     private String mInitErrorMsg;
 
     private PalettePieceItem[] mPalette;
-    private String[][] mBoard;
+    private CellItem[][] mBoard;
 
     private int mIncorrectAnswersCount;
 
@@ -67,7 +69,7 @@ public class BoardPresenter implements BoardContract.Presenter {
         mLevelsRepository = levelsRepository;
 
         mPalette = new PalettePieceItem[0];
-        mBoard = new String[0][];
+        mBoard = new CellItem[0][];
         mIncorrectAnswersCount = 0;
 
         mSoundEnabled = true;
@@ -93,6 +95,7 @@ public class BoardPresenter implements BoardContract.Presenter {
     @Override
     public void onDetachView() {
         mView = new BoardViewNull();
+        saveLevelState();
         releaseNextLevelHandler();
     }
 
@@ -106,12 +109,21 @@ public class BoardPresenter implements BoardContract.Presenter {
     }
 
     @Override
-    public String[][] getBoard() {
+    public CellItem[][] getBoard() {
         if (needRequestLevel()) {
-            return new String[0][];
+            return new CellItem[0][];
         }
 
         return mBoard;
+    }
+
+    @Override
+    public void resetBoard() {
+        mIncorrectAnswersCount = 0;
+
+        mLevel = mLevelsRepository.resetLevel(mLevel.getId());
+        initBoard();
+        mLevelRequestTimeMillis = System.currentTimeMillis();
     }
 
     @Override
@@ -123,6 +135,11 @@ public class BoardPresenter implements BoardContract.Presenter {
     public void levelCompleted() {
         saveLevelState();
         mNextLevelHandler.postDelayed(mNextLevelRunnable, 4000);
+    }
+
+    @Override
+    public void hookPiece(int row, int col) {
+        mBoard[row][col].setPicked(true);
     }
 
     @Override
@@ -173,10 +190,31 @@ public class BoardPresenter implements BoardContract.Presenter {
 
     private void init() {
         mLevel = mLevelsLogic.getCurrentLevel();
-        mBoard = mLevel.getBoard();
+        initBoard();
         createPalette(mLevel.getPalette());
 
         mLevelRequestTimeMillis = System.currentTimeMillis();
+    }
+
+    private void initBoard() {
+        int rows = mLevel.getBoard().length;
+        int cols = mLevel.getBoard().length > 0 ? mLevel.getBoard()[0].length : 0;
+
+        mBoard = new CellItem[rows][cols];
+        for (int i=0; i<rows; i++) {
+            for (int j=0; j<cols; j++) {
+                Cell cell = mLevel.getBoard()[i][j];
+                mBoard[i][j] = createCellItem(cell);
+            }
+        }
+    }
+
+    private CellItem createCellItem(Cell cell) {
+        CellItem cellItem = new CellItem();
+        cellItem.setPieceId(cell.getPieceId());
+        cellItem.setPicked(cell.isPicked());
+
+        return cellItem;
     }
 
     private void createPalette(PalettePiece[] palettePieces) {
@@ -217,7 +255,31 @@ public class BoardPresenter implements BoardContract.Presenter {
         int levelStars = calculateLevelStars();
         mLevel.setState(getLevelState(levelStars));
         mLevel.setIncorrectAnswers(mIncorrectAnswersCount);
+        mLevel.setBoard(getBoardCells());
         mLevelsRepository.saveLevel(mLevel);
+    }
+
+    private Cell[][] getBoardCells() {
+        int rows = mBoard.length;
+        int cols = mBoard.length > 0 ? mBoard[0].length : 0;
+
+        Cell[][] cells = new Cell[rows][cols];
+        for (int i=0; i<rows; i++) {
+            for (int j=0; j<cols; j++) {
+                CellItem cellItem = mBoard[i][j];
+                cells[i][j] = createCell(cellItem);
+            }
+        }
+
+        return cells;
+    }
+
+    private Cell createCell(CellItem cellItem) {
+        Cell cell = new Cell();
+        cell.setPieceId(cellItem.getPieceId());
+        cell.setPicked(cellItem.isPicked());
+
+        return cell;
     }
 
     private int calculateLevelStars() {

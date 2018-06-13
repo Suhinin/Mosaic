@@ -27,7 +27,6 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import com.childaplic.mosaic.R;
-import com.childaplic.mosaic.presenters.board.BoardPresenter;
 import com.childaplic.mosaic.presenters.board.PalettePieceItem;
 import com.childaplic.mosaic.services.assets.AssetsService;
 import com.childaplic.mosaic.services.imageloader.ImageLoaderService;
@@ -54,7 +53,7 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
     // region Injections
 
     @Inject
-    protected BoardPresenter mPresenter;
+    protected BoardContract.Presenter mPresenter;
     @Inject
     protected ImageLoaderService mImageLoaderService;
     @Inject
@@ -74,6 +73,7 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
     private Size mBtnSize;
 
     private ImageView mBtnBack;
+    private ImageView mBtnReplay;
     private ImageView mBtnMusic;
 
     private Size mBoardViewSize;
@@ -175,6 +175,7 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
 
         addBackButton();
         addMusicButton();
+        addReplayButton();
 
         return mRootView;
     }
@@ -303,12 +304,12 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
     }
 
     private Drawable createBtnBackDrawable() {
-        Bitmap backPressed = mImageLoaderService.getAssets(ASSETS_BOARD_FOLDER + "back_pressed.png", mBtnSize.getWidth(), mBtnSize.getHeight());
-        Bitmap backNormal = mImageLoaderService.getAssets(ASSETS_BOARD_FOLDER + "back.png", mBtnSize.getWidth(), mBtnSize.getHeight());
+        Bitmap pressed = mImageLoaderService.getAssets(ASSETS_BOARD_FOLDER + "back_pressed.png", mBtnSize.getWidth(), mBtnSize.getHeight());
+        Bitmap normal = mImageLoaderService.getAssets(ASSETS_BOARD_FOLDER + "back.png", mBtnSize.getWidth(), mBtnSize.getHeight());
 
         StateListDrawable drawable = new StateListDrawable();
-        drawable.addState(new int[]{android.R.attr.state_pressed}, new BitmapDrawable(getResources(), backPressed));
-        drawable.addState(new int[]{}, new BitmapDrawable(getResources(), backNormal));
+        drawable.addState(new int[]{android.R.attr.state_pressed}, new BitmapDrawable(getResources(), pressed));
+        drawable.addState(new int[]{}, new BitmapDrawable(getResources(), normal));
 
         return drawable;
     }
@@ -330,16 +331,42 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
     }
 
     private Drawable createBtnMusicDrawable() {
-        Bitmap enabled_pressed = mImageLoaderService.getAssets(ASSETS_BOARD_FOLDER + "music_pressed.png", mBtnSize.getWidth(), mBtnSize.getHeight());
-        Bitmap enabled_normal = mImageLoaderService.getAssets(ASSETS_BOARD_FOLDER + "music.png", mBtnSize.getWidth(), mBtnSize.getHeight());
-        Bitmap disabled_pressed = mImageLoaderService.getAssets(ASSETS_BOARD_FOLDER + "no_music_pressed.png", mBtnSize.getWidth(), mBtnSize.getHeight());
-        Bitmap disabled_normal = mImageLoaderService.getAssets(ASSETS_BOARD_FOLDER + "no_music.png", mBtnSize.getWidth(), mBtnSize.getHeight());
+        Bitmap enabledPressed = mImageLoaderService.getAssets(ASSETS_BOARD_FOLDER + "music_pressed.png", mBtnSize.getWidth(), mBtnSize.getHeight());
+        Bitmap enabledNormal = mImageLoaderService.getAssets(ASSETS_BOARD_FOLDER + "music.png", mBtnSize.getWidth(), mBtnSize.getHeight());
+        Bitmap disabledPressed = mImageLoaderService.getAssets(ASSETS_BOARD_FOLDER + "no_music_pressed.png", mBtnSize.getWidth(), mBtnSize.getHeight());
+        Bitmap disabledNormal = mImageLoaderService.getAssets(ASSETS_BOARD_FOLDER + "no_music.png", mBtnSize.getWidth(), mBtnSize.getHeight());
 
         StateListDrawable drawable = new StateListDrawable();
-        drawable.addState(new int[]{android.R.attr.state_pressed, android.R.attr.state_selected}, new BitmapDrawable(getResources(), enabled_pressed));
-        drawable.addState(new int[]{android.R.attr.state_selected}, new BitmapDrawable(getResources(), enabled_normal));
-        drawable.addState(new int[]{android.R.attr.state_pressed}, new BitmapDrawable(getResources(), disabled_pressed));
-        drawable.addState(new int[]{}, new BitmapDrawable(getResources(), disabled_normal));
+        drawable.addState(new int[]{android.R.attr.state_pressed, android.R.attr.state_selected}, new BitmapDrawable(getResources(), enabledPressed));
+        drawable.addState(new int[]{android.R.attr.state_selected}, new BitmapDrawable(getResources(), enabledNormal));
+        drawable.addState(new int[]{android.R.attr.state_pressed}, new BitmapDrawable(getResources(), disabledPressed));
+        drawable.addState(new int[]{}, new BitmapDrawable(getResources(), disabledNormal));
+
+        return drawable;
+    }
+
+    private void addReplayButton() {
+        mBtnReplay = new ImageView(getContext());
+        mBtnReplay.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        mBtnReplay.setImageDrawable(createBtnReplayDrawable());
+        mBtnReplay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.resetBoard();
+                mBoardView.init(mPresenter.getPalette(), mPresenter.getBoard());
+            }
+        });
+
+        mRootView.addView(mBtnReplay, LayoutHelper.createFramePx(mBtnSize, Gravity.END | Gravity.CENTER_VERTICAL, mFragmentPadding, mFragmentPadding, mFragmentPadding, mFragmentPadding));
+    }
+
+    private Drawable createBtnReplayDrawable() {
+        Bitmap pressed = mImageLoaderService.getAssets(ASSETS_BOARD_FOLDER + "replay_pressed.png", mBtnSize.getWidth(), mBtnSize.getHeight());
+        Bitmap normal = mImageLoaderService.getAssets(ASSETS_BOARD_FOLDER + "replay.png", mBtnSize.getWidth(), mBtnSize.getHeight());
+
+        StateListDrawable drawable = new StateListDrawable();
+        drawable.addState(new int[]{android.R.attr.state_pressed}, new BitmapDrawable(getResources(), pressed));
+        drawable.addState(new int[]{}, new BitmapDrawable(getResources(), normal));
 
         return drawable;
     }
@@ -514,15 +541,16 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
                     PositionedPieceItem pieceInside = mBoardView.getPieceInside(movedPieceRect);
                     if (pieceInside != null) {
                         if (pieceInside.getColor() == mPalettePieceItem.getColor()) {
-                            playSound(mSoundCorrectChecked);
-
                             mBoardView.hookPiece(pieceInside);
                             mRootView.removeView(mMovedPiece);
                             enableLostBeadsTouches();
 
+                            mPresenter.hookPiece(pieceInside.getRow(), pieceInside.getCol());
                             if (mBoardView.isCompleted()) {
                                 playSound(mSoundLevelComplete);
                                 mPresenter.levelCompleted();
+                            } else {
+                                playSound(mSoundCorrectChecked);
                             }
                         } else {
                             mPresenter.incIncorrectCount();

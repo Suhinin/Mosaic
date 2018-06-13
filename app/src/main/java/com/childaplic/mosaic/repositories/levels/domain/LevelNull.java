@@ -53,8 +53,12 @@ public class LevelNull implements Level {
     }
 
     @Override
-    public String[][] getBoard() {
-        return new String[0][];
+    public Cell[][] getBoard() {
+        return new Cell[0][];
     }
 
+    @Override
+    public void setBoard(Cell[][] board) {
+        // empty stub
+    }
 }

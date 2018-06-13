@@ -10,6 +10,8 @@ import com.childaplic.mosaic.services.imageloader.ImageLoaderService;
 import com.childaplic.mosaic.services.imageloader.ImageLoaderStandard;
 import com.childaplic.mosaic.services.logger.LoggerFabric;
 import com.childaplic.mosaic.services.logger.LoggerService;
+import com.childaplic.mosaic.services.shared.SharedPreferencesService;
+import com.childaplic.mosaic.services.shared.SharedService;
 import com.childaplic.mosaic.services.sqlite.DBManager;
 import com.childaplic.mosaic.services.sqlite.SqlLiteManger;
 import dagger.Module;
@@ -19,12 +21,12 @@ import dagger.Provides;
 @Module
 public class ServicesModule {
 
-//    @Provides
-//    @Singleton
-//    public SharedService provideSharedPreference(SharedPreferencesService service) {
-//        return service;
-//    }
-//
+    @Provides
+    @Singleton
+    public SharedService provideSharedPreference(SharedPreferencesService service) {
+        return service;
+    }
+
     @Provides
     @Singleton
     public DBManager provideDBManager(SqlLiteManger service) {

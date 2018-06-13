@@ -12,7 +12,7 @@ public class LevelImpl implements Level {
     private boolean mIsShowOnBoarding;
     private int mIncorrectAnswers;
     private PalettePiece[] mPalette;
-    private String[][] mBoard;
+    private Cell[][] mBoard;
 
     // endregion
 
@@ -70,8 +70,13 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public String[][] getBoard() {
+    public Cell[][] getBoard() {
         return mBoard;
+    }
+
+    @Override
+    public void setBoard(Cell[][] board) {
+        mBoard = board;
     }
 
     // endregion
@@ -93,10 +98,6 @@ public class LevelImpl implements Level {
 
     public void setPalette(PalettePiece[] palette) {
         mPalette = palette;
-    }
-
-    public void setBoard(String[][] board) {
-        mBoard = board;
     }
 
     // endregion

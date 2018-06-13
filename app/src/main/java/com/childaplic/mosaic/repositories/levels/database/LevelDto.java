@@ -6,6 +6,7 @@ public class LevelDto {
     private String mState;
     private boolean mIsShowOnBoarding;
     private int mIncorrectAnswers;
+    private String mBoardJson;
 
     public String getId() {
         return mId;
@@ -39,4 +40,11 @@ public class LevelDto {
         mIncorrectAnswers = count;
     }
 
+    public String getBoardJson() {
+        return mBoardJson;
+    }
+
+    public void setBoardJson(String boardJson) {
+        mBoardJson = boardJson;
+    }
 }

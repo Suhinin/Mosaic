@@ -1,5 +1,6 @@
 package com.childaplic.mosaic.ui.board;
 
+import com.childaplic.mosaic.presenters.board.CellItem;
 import com.childaplic.mosaic.presenters.board.PalettePieceItem;
 
 public interface BoardContract {
@@ -22,11 +23,15 @@ public interface BoardContract {
 
         PalettePieceItem[] getPalette();
 
-        String[][] getBoard();
+        CellItem[][] getBoard();
+
+        void resetBoard();
 
         void incIncorrectCount();
 
         void levelCompleted();
+
+        void hookPiece(int row, int col);
 
         boolean isSoundEnabled();
 

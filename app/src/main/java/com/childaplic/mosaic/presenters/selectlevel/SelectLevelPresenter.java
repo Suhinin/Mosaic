@@ -89,16 +89,6 @@ public class SelectLevelPresenter implements SelectLevelContract.Presenter {
         mLevelsLogic.setCurrentLevelId(levelItem.getId());
     }
 
-    @Override
-    public LevelItem getVisibleLevel() {
-        Level currentLevel =  mLevelsLogic.getCurrentLevel();
-        if (currentLevel instanceof LevelNull) {
-            return null;
-        }
-
-        return createLevelItem(currentLevel);
-    }
-
     // endregion
 
 
