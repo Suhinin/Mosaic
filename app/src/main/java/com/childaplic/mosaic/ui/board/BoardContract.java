@@ -28,5 +28,9 @@ public interface BoardContract {
 
         void levelCompleted();
 
+        boolean isSoundEnabled();
+
+        boolean toggleSoundEnabled();
+
     }
 }

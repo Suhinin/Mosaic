@@ -1,6 +1,6 @@
 {
-  "number": 16,
-  "preview_path": "images/previews/picture_16.png",
+  "number": 20,
+  "preview_path": "images/previews/picture_20.png",
   "palette": [
     {
       "piece_id": "black",
@@ -53,6 +53,26 @@
     "columns": 11,
     "filled_cells": [
       {
+        "row": 0,
+        "col": 4,
+        "piece_id": "yellow"
+      },
+      {
+        "row": 0,
+        "col": 5,
+        "piece_id": "yellow"
+      },
+      {
+        "row": 0,
+        "col": 6,
+        "piece_id": "yellow"
+      },
+      {
+        "row": 1,
+        "col": 3,
+        "piece_id": "yellow"
+      },
+      {
         "row": 1,
         "col": 4,
         "piece_id": "yellow"
@@ -68,6 +88,11 @@
         "piece_id": "yellow"
       },
       {
+        "row": 1,
+        "col": 7,
+        "piece_id": "yellow"
+      },
+      {
         "row": 2,
         "col": 2,
         "piece_id": "yellow"
@@ -75,12 +100,12 @@
       {
         "row": 2,
         "col": 3,
-        "piece_id": "yellow"
+        "piece_id": "white"
       },
       {
         "row": 2,
         "col": 4,
-        "piece_id": "yellow"
+        "piece_id": "white"
       },
       {
         "row": 2,
@@ -90,12 +115,12 @@
       {
         "row": 2,
         "col": 6,
-        "piece_id": "yellow"
+        "piece_id": "white"
       },
       {
         "row": 2,
         "col": 7,
-        "piece_id": "yellow"
+        "piece_id": "white"
       },
       {
         "row": 2,
@@ -110,12 +135,12 @@
       {
         "row": 3,
         "col": 3,
-        "piece_id": "yellow"
+        "piece_id": "white"
       },
       {
         "row": 3,
         "col": 4,
-        "piece_id": "yellow"
+        "piece_id": "blue"
       },
       {
         "row": 3,
@@ -125,21 +150,16 @@
       {
         "row": 3,
         "col": 6,
-        "piece_id": "yellow"
+        "piece_id": "blue"
       },
       {
         "row": 3,
         "col": 7,
-        "piece_id": "yellow"
+        "piece_id": "white"
       },
       {
         "row": 3,
         "col": 8,
-        "piece_id": "yellow"
-      },
-      {
-        "row": 4,
-        "col": 1,
         "piece_id": "yellow"
       },
       {
@@ -155,17 +175,17 @@
       {
         "row": 4,
         "col": 4,
-        "piece_id": "black"
+        "piece_id": "orange"
       },
       {
         "row": 4,
         "col": 5,
-        "piece_id": "yellow"
+        "piece_id": "orange"
       },
       {
         "row": 4,
         "col": 6,
-        "piece_id": "black"
+        "piece_id": "orange"
       },
       {
         "row": 4,
@@ -175,21 +195,6 @@
       {
         "row": 4,
         "col": 8,
-        "piece_id": "yellow"
-      },
-      {
-        "row": 4,
-        "col": 9,
-        "piece_id": "yellow"
-      },
-      {
-        "row": 5,
-        "col": 1,
-        "piece_id": "yellow"
-      },
-      {
-        "row": 5,
-        "col": 2,
         "piece_id": "yellow"
       },
       {
@@ -205,7 +210,7 @@
       {
         "row": 5,
         "col": 5,
-        "piece_id": "yellow"
+        "piece_id": "orange"
       },
       {
         "row": 5,
@@ -218,29 +223,9 @@
         "piece_id": "yellow"
       },
       {
-        "row": 5,
-        "col": 8,
-        "piece_id": "yellow"
-      },
-      {
-        "row": 5,
-        "col": 9,
-        "piece_id": "yellow"
-      },
-      {
         "row": 6,
-        "col": 1,
-        "piece_id": "yellow"
-      },
-      {
-        "row": 6,
-        "col": 2,
-        "piece_id": "yellow"
-      },
-      {
-        "row": 6,
-        "col": 3,
-        "piece_id": "black"
+        "col": 0,
+        "piece_id": "green"
       },
       {
         "row": 6,
@@ -255,27 +240,22 @@
       {
         "row": 6,
         "col": 6,
-        "piece_id": "yellow"
-      },
-      {
-        "row": 6,
-        "col": 7,
-        "piece_id": "black"
-      },
-      {
-        "row": 6,
-        "col": 8,
         "piece_id": "yellow"
       },
       {
         "row": 6,
         "col": 9,
-        "piece_id": "yellow"
+        "piece_id": "green"
       },
       {
         "row": 7,
-        "col": 2,
-        "piece_id": "yellow"
+        "col": 0,
+        "piece_id": "green"
+      },
+      {
+        "row": 7,
+        "col": 1,
+        "piece_id": "green"
       },
       {
         "row": 7,
@@ -285,17 +265,17 @@
       {
         "row": 7,
         "col": 4,
-        "piece_id": "black"
+        "piece_id": "yellow"
       },
       {
         "row": 7,
         "col": 5,
-        "piece_id": "black"
+        "piece_id": "green"
       },
       {
         "row": 7,
         "col": 6,
-        "piece_id": "black"
+        "piece_id": "yellow"
       },
       {
         "row": 7,
@@ -305,12 +285,22 @@
       {
         "row": 7,
         "col": 8,
-        "piece_id": "yellow"
+        "piece_id": "green"
+      },
+      {
+        "row": 7,
+        "col": 9,
+        "piece_id": "green"
+      },
+      {
+        "row": 8,
+        "col": 1,
+        "piece_id": "green"
       },
       {
         "row": 8,
         "col": 2,
-        "piece_id": "yellow"
+        "piece_id": "green"
       },
       {
         "row": 8,
@@ -320,12 +310,12 @@
       {
         "row": 8,
         "col": 4,
-        "piece_id": "yellow"
+        "piece_id": "green"
       },
       {
         "row": 8,
         "col": 5,
-        "piece_id": "yellow"
+        "piece_id": "green"
       },
       {
         "row": 8,
@@ -335,27 +325,77 @@
       {
         "row": 8,
         "col": 7,
-        "piece_id": "yellow"
+        "piece_id": "green"
       },
       {
         "row": 8,
         "col": 8,
+        "piece_id": "green"
+      },
+      {
+        "row": 8,
+        "col": 9,
         "piece_id": "yellow"
+      },
+      {
+        "row": 8,
+        "col": 10,
+        "piece_id": "green"
+      },
+      {
+        "row": 9,
+        "col": 0,
+        "piece_id": "green"
+      },
+      {
+        "row": 9,
+        "col": 1,
+        "piece_id": "green"
+      },
+      {
+        "row": 9,
+        "col": 2,
+        "piece_id": "green"
+      },
+      {
+        "row": 9,
+        "col": 3,
+        "piece_id": "green"
       },
       {
         "row": 9,
         "col": 4,
-        "piece_id": "yellow"
+        "piece_id": "green"
       },
       {
         "row": 9,
         "col": 5,
-        "piece_id": "yellow"
+        "piece_id": "green"
       },
       {
         "row": 9,
         "col": 6,
-        "piece_id": "yellow"
+        "piece_id": "green"
+      },
+      {
+        "row": 9,
+        "col": 7,
+        "piece_id": "green"
+      },
+      {
+        "row": 9,
+        "col": 8,
+        "piece_id": "green"
+      },
+      {
+        "row": 9,
+        "col": 9,
+        "piece_id": "green"
+      },
+      {
+        "row": 9,
+        "col": 10,
+        "piece_id": "green"
       }
     ]
   }

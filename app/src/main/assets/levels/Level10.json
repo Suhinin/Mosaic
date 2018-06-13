@@ -41,6 +41,11 @@
       "piece_id": "yellow",
       "color_hex": "#FFFF00",
       "image_path": "images/palette/yellow.png"
+    },
+    {
+      "piece_id": "white",
+      "color_hex": "#dbfff5",
+      "image_path": "images/palette/white.png"
     }
   ],
   "board": {

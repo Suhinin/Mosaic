@@ -11,15 +11,17 @@
 
     <!-- region BoardFragment -->
 
-    <dimen name="board_fragment__vertical_margin">12dp</dimen>
+    <dimen name="board_fragment__padding">12dp</dimen>
 
-    <dimen name="board_fragment__palette_horizontal_margin">15dp</dimen>
     <dimen name="board_fragment__palette_piece_size">50dp</dimen>
     <dimen name="board_fragment__palette_piece_margin">8dp</dimen>
 
     <dimen name="board_fragment__board_view_vertical_margin">5dp</dimen>
     <dimen name="board_fragment__board_view_grid_stoke_width">1dp</dimen>
     <dimen name="board_fragment__board_view_colored_stoke_width">3dp</dimen>
+
+    <dimen name="board_fragment__btn_width">42dp</dimen>
+    <dimen name="board_fragment__btn_height">36dp</dimen>
 
     <!-- endregion -->
 

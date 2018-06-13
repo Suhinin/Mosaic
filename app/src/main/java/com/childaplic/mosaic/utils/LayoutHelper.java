@@ -22,6 +22,12 @@ public class LayoutHelper {
         return new ScrollView.LayoutParams(getSize(context, widthDp), getSize(context, heightDp), gravity);
     }
 
+    public static FrameLayout.LayoutParams createFramePx(Size size, int gravity, int leftMarginPx, int topMarginPx, int rightMarginPx, int bottomMarginPx) {
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(size.getWidth(), size.getHeight(), gravity);
+        layoutParams.setMargins(leftMarginPx, topMarginPx, rightMarginPx, bottomMarginPx);
+        return layoutParams;
+    }
+
     public static FrameLayout.LayoutParams createFramePx(int widthPx, int heightPx, int gravity, int leftMarginPx, int topMarginPx, int rightMarginPx, int bottomMarginPx) {
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(widthPx, heightPx, gravity);
         layoutParams.setMargins(leftMarginPx, topMarginPx, rightMarginPx, bottomMarginPx);

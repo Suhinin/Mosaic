@@ -46,6 +46,7 @@ public class BoardPresenter implements BoardContract.Presenter {
     private int mIncorrectAnswersCount;
 
     private Handler mNextLevelHandler;
+    private boolean mSoundEnabled;
 
     // endregion
 
@@ -69,6 +70,7 @@ public class BoardPresenter implements BoardContract.Presenter {
         mBoard = new String[0][];
         mIncorrectAnswersCount = 0;
 
+        mSoundEnabled = true;
         mInitState = InitState.NONE;
     }
 
@@ -121,6 +123,17 @@ public class BoardPresenter implements BoardContract.Presenter {
     public void levelCompleted() {
         saveLevelState();
         mNextLevelHandler.postDelayed(mNextLevelRunnable, 4000);
+    }
+
+    @Override
+    public synchronized boolean toggleSoundEnabled() {
+        mSoundEnabled = !mSoundEnabled;
+        return mSoundEnabled;
+    }
+
+    @Override
+    public boolean isSoundEnabled() {
+        return mSoundEnabled;
     }
 
     // endregion

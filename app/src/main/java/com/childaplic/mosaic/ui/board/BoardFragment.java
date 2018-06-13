@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.StateListDrawable;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
@@ -41,6 +44,7 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
     private final String TAG = BoardFragment.class.getCanonicalName();
 
     private final String ASSETS_BACKGROUND = "images/board/bg_board.png";
+    private final String ASSETS_BOARD_FOLDER = "images/board/";
 
     private final int PALETTE_COLUMNS_COUNT = 2;
 
@@ -66,7 +70,11 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
     private FrameLayout mPaletteContainer;
     private BoardView mBoardView;
 
-    private int mFragmentVerticalPadding;
+    private int mFragmentPadding;
+    private Size mBtnSize;
+
+    private ImageView mBtnBack;
+    private ImageView mBtnMusic;
 
     private Size mBoardViewSize;
     private Margin mBoardViewMargin;
@@ -152,6 +160,7 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
         mRootView = new FrameLayout(getContext());
 
         calculateFragmentVerticalPadding();
+        calculateBtnSize();
         calculatePaletteSize();
         calcPaletteViewMargin();
 
@@ -164,29 +173,37 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
         addBoardView();
         initBoardView();
 
+        addBackButton();
+        addMusicButton();
+
         return mRootView;
     }
 
     private void calculateFragmentVerticalPadding() {
-        mFragmentVerticalPadding = (int) getResources().getDimension(R.dimen.board_fragment__vertical_margin);
+        mFragmentPadding = (int) getResources().getDimension(R.dimen.board_fragment__padding);
+    }
+
+    private void calculateBtnSize() {
+        int width = (int) getResources().getDimension(R.dimen.board_fragment__btn_width);
+        int height = (int) getResources().getDimension(R.dimen.board_fragment__btn_height);
+
+        mBtnSize = new Size(width, height);
     }
 
     private void calculatePaletteSize() {
         mPalettePieceSize = (int) getResources().getDimension(R.dimen.board_fragment__palette_piece_size);
         mPalettePieceMargin = (int) getResources().getDimension(R.dimen.board_fragment__palette_piece_margin);
 
-        int width = mPalettePieceSize*PALETTE_COLUMNS_COUNT + (PALETTE_COLUMNS_COUNT+1)* mPalettePieceMargin;
+        int width = mPalettePieceSize*PALETTE_COLUMNS_COUNT + (PALETTE_COLUMNS_COUNT+1)*mPalettePieceMargin;
 
         Size screenSize = ScreenUtil.getScreenSize(getContext());
-        int height = screenSize.getHeight() - 2*mFragmentVerticalPadding;
+        int height = screenSize.getHeight() - 2* mFragmentPadding;
 
         mPaletteContainerSize = new Size(width, height);
     }
 
     private void calcPaletteViewMargin() {
-        int margin = (int) getResources().getDimension(R.dimen.board_fragment__palette_horizontal_margin);
-
-        mPaletteContainerMargin = new Margin(margin, mFragmentVerticalPadding, margin, mFragmentVerticalPadding);
+        mPaletteContainerMargin = new Margin(mFragmentPadding, mFragmentPadding, mFragmentPadding, mFragmentPadding);
     }
 
     private void addBackground() {
@@ -194,9 +211,8 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
         imageBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
         mRootView.addView(imageBackground, LayoutHelper.createFramePx(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
-        int width = ScreenUtil.getScreenSize(getContext()).getWidth();
-        int height = ScreenUtil.getScreenSize(getContext()).getHeight();
-        mImageLoaderService.loadAssets(ASSETS_BACKGROUND, width, height, imageBackground);
+        Size screenSize = ScreenUtil.getScreenSize(getContext());
+        mImageLoaderService.loadAssets(ASSETS_BACKGROUND, screenSize.getWidth(), screenSize.getHeight(), imageBackground);
     }
 
     private void addBoardView() {
@@ -272,6 +288,62 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
         return Bitmap.createScaledBitmap(bitmap, mPalettePieceSize, mPalettePieceSize, true);
     }
 
+    private void addBackButton() {
+        mBtnBack = new ImageView(getContext());
+        mBtnBack.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        mBtnBack.setImageDrawable(createBtnBackDrawable());
+        mBtnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+
+        mRootView.addView(mBtnBack, LayoutHelper.createFramePx(mBtnSize, Gravity.END | Gravity.TOP, mFragmentPadding, mFragmentPadding, mFragmentPadding, mFragmentPadding));
+    }
+
+    private Drawable createBtnBackDrawable() {
+        Bitmap backPressed = mImageLoaderService.getAssets(ASSETS_BOARD_FOLDER + "back_pressed.png", mBtnSize.getWidth(), mBtnSize.getHeight());
+        Bitmap backNormal = mImageLoaderService.getAssets(ASSETS_BOARD_FOLDER + "back.png", mBtnSize.getWidth(), mBtnSize.getHeight());
+
+        StateListDrawable drawable = new StateListDrawable();
+        drawable.addState(new int[]{android.R.attr.state_pressed}, new BitmapDrawable(getResources(), backPressed));
+        drawable.addState(new int[]{}, new BitmapDrawable(getResources(), backNormal));
+
+        return drawable;
+    }
+
+    private void addMusicButton() {
+        mBtnMusic = new ImageView(getContext());
+        mBtnMusic.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        mBtnMusic.setSelected(mPresenter.isSoundEnabled());
+        mBtnMusic.setImageDrawable(createBtnMusicDrawable());
+        mBtnMusic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean isPlaying = mPresenter.toggleSoundEnabled();
+                view.setSelected(isPlaying);
+            }
+        });
+
+        mRootView.addView(mBtnMusic, LayoutHelper.createFramePx(mBtnSize, Gravity.END | Gravity.BOTTOM, mFragmentPadding, mFragmentPadding, mFragmentPadding, mFragmentPadding));
+    }
+
+    private Drawable createBtnMusicDrawable() {
+        Bitmap enabled_pressed = mImageLoaderService.getAssets(ASSETS_BOARD_FOLDER + "music_pressed.png", mBtnSize.getWidth(), mBtnSize.getHeight());
+        Bitmap enabled_normal = mImageLoaderService.getAssets(ASSETS_BOARD_FOLDER + "music.png", mBtnSize.getWidth(), mBtnSize.getHeight());
+        Bitmap disabled_pressed = mImageLoaderService.getAssets(ASSETS_BOARD_FOLDER + "no_music_pressed.png", mBtnSize.getWidth(), mBtnSize.getHeight());
+        Bitmap disabled_normal = mImageLoaderService.getAssets(ASSETS_BOARD_FOLDER + "no_music.png", mBtnSize.getWidth(), mBtnSize.getHeight());
+
+        StateListDrawable drawable = new StateListDrawable();
+        drawable.addState(new int[]{android.R.attr.state_pressed, android.R.attr.state_selected}, new BitmapDrawable(getResources(), enabled_pressed));
+        drawable.addState(new int[]{android.R.attr.state_selected}, new BitmapDrawable(getResources(), enabled_normal));
+        drawable.addState(new int[]{android.R.attr.state_pressed}, new BitmapDrawable(getResources(), disabled_pressed));
+        drawable.addState(new int[]{}, new BitmapDrawable(getResources(), disabled_normal));
+
+        return drawable;
+    }
+
     // endregion
 
 
@@ -314,9 +386,7 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
         int rows = mPresenter.getBoard().length;
         int cols = mPresenter.getBoard().length > 0 ? mPresenter.getBoard()[0].length : 0;
 
-        Size screenSize = ScreenUtil.getScreenSize(getContext());
-        int availableHeight = screenSize.getHeight() - 2*mFragmentVerticalPadding - 2*boardPadding;
-        float cellSize = rows > 0 ? availableHeight/rows : 0;
+        float cellSize = calculateCellSize(rows, boardPadding);
 
         int width = (int) (2*boardPadding + cellSize*cols);
         int height = (int) (2*boardPadding + cellSize*rows);
@@ -324,13 +394,20 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
         mBoardViewSize = new Size(width, height);
     }
 
+    private float calculateCellSize(int rows, int boardPadding) {
+        Size screenSize = ScreenUtil.getScreenSize(getContext());
+        int availableHeight = screenSize.getHeight() - 2* mFragmentPadding - 2*boardPadding;
+        return rows > 0 ? availableHeight/rows : 0;
+    }
+
     private void calcBoardViewMargin() {
         Size screenSize = ScreenUtil.getScreenSize(getContext());
         float paletteContainerRight = mPaletteContainerMargin.getLeft() + mPaletteContainerSize.getWidth();
-        float availableWidth = screenSize.getWidth() - paletteContainerRight;
+        int buttonsContainerWidth = mBtnSize.getWidth() + mFragmentPadding;
+        float availableWidth = screenSize.getWidth() - paletteContainerRight - buttonsContainerWidth;
 
         int left = (int) (paletteContainerRight + (availableWidth - mBoardViewSize.getWidth())/2f);
-        int top = mFragmentVerticalPadding;
+        int top = mFragmentPadding;
 
         mBoardViewMargin = new Margin(left, top, 0, 0);
     }
@@ -372,6 +449,10 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
     }
 
     private void playSound(int soundId) {
+        if (mPresenter.isSoundEnabled() == false) {
+            return;
+        }
+
         mSoundPool.play(soundId, 1, 1, 0, 0, 1);
     }
 
