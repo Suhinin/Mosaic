@@ -101,20 +101,6 @@ public class LevelsAdapter extends RecyclerView.Adapter<LevelViewHolder> {
         return mModelItems.get(position);
     }
 
-    public List<LevelItem> getItems() {
-        return mModelItems;
-    }
-
-    public int getItemPosition(LevelItem levelItem) {
-        for (int i=0; i<mModelItems.size(); i++) {
-            if (mModelItems.get(i).getId().equals(levelItem.getId())) {
-                return i;
-            }
-        }
-
-        return RecyclerView.NO_POSITION;
-    }
-
     // endregion
 
 

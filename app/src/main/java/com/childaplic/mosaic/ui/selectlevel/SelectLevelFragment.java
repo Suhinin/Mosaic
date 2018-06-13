@@ -2,10 +2,12 @@ package com.childaplic.mosaic.ui.selectlevel;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
+import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.view.LayoutInflater;
@@ -18,6 +20,7 @@ import android.widget.Toast;
 import com.childaplic.mosaic.presenters.selectlevel.LevelItem;
 import com.childaplic.mosaic.services.imageloader.ImageLoaderService;
 import com.childaplic.mosaic.services.shared.SharedService;
+import com.childaplic.mosaic.ui.common.Size;
 import com.childaplic.mosaic.ui.selectlevel.list.LevelClickHandler;
 import com.childaplic.mosaic.ui.selectlevel.list.LevelsAdapter;
 import com.childaplic.mosaic.ui.selectlevel.list.LevelsOffsetDecoration;
@@ -156,9 +159,8 @@ public class SelectLevelFragment extends DaggerFragment implements SelectLevelCo
         imageBackground.setScaleType(ImageView.ScaleType.CENTER_CROP);
         mRootView.addView(imageBackground, LayoutHelper.createFramePx(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
-        int width = ScreenUtil.getScreenSize(getContext()).getWidth();
-        int height = ScreenUtil.getScreenSize(getContext()).getHeight();
-        mImageLoaderService.loadAssets(ASSETS_BACKGROUND, width, height, imageBackground);
+        Size screenSize = ScreenUtil.getScreenSize(getContext());
+        mImageLoaderService.loadAssets(ASSETS_BACKGROUND, screenSize.getWidth(), screenSize.getHeight(), imageBackground);
     }
 
     private void addLevelsList() {

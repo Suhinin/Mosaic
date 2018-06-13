@@ -24,17 +24,36 @@ public class LevelsOffsetDecoration extends RecyclerView.ItemDecoration {
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         super.getItemOffsets(outRect, view, parent, state);
 
+        int count = parent.getAdapter().getItemCount();
         int position = parent.getChildAdapterPosition(view);
         int row = position % mSpanCount;
 
+//        if (position == 0) {
+//            outRect.set(mFragmentMargin, mFragmentMargin, mGridSpace, mGridSpace);
+//        } else if (position == 1) {
+//            outRect.set(mFragmentMargin, 0, mGridSpace, mFragmentMargin);
+//        } else if (position == count - 2) {
+//            outRect.set(0, mFragmentMargin, mFragmentMargin, mGridSpace);
+//        } else if (position == count - 1) {
+//            outRect.set(0, 0, mFragmentMargin, mFragmentMargin);
+//        } else if (row == 0) {
+//            outRect.set(0, mFragmentMargin, mGridSpace, mGridSpace);
+//        } else {
+//            outRect.set(0, 0, mGridSpace, mFragmentMargin);
+//        }
+
         if (position == 0) {
-            outRect.set(mFragmentMargin, mFragmentMargin, mGridSpace, mGridSpace);
+            outRect.set(mFragmentMargin, 0, mGridSpace, 0);
         } else if (position == 1) {
-            outRect.set(mFragmentMargin, 0, mGridSpace, mFragmentMargin);
+            outRect.set(mFragmentMargin, 0, mGridSpace, 0);
+        } else if (position == count - 2) {
+            outRect.set(0, 0, mFragmentMargin, 0);
+        } else if (position == count - 1) {
+            outRect.set(0, 0, mFragmentMargin, 0);
         } else if (row == 0) {
-            outRect.set(0, mFragmentMargin, mGridSpace, mGridSpace);
+            outRect.set(0, 0, mGridSpace, 0);
         } else {
-            outRect.set(0, 0, mGridSpace, mFragmentMargin);
+            outRect.set(0, 0, mGridSpace, 0);
         }
     }
 
