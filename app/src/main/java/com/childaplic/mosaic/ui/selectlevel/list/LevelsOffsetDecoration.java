@@ -9,52 +9,20 @@ import com.childaplic.mosaic.R;
 
 public class LevelsOffsetDecoration extends RecyclerView.ItemDecoration {
 
-    private int mFragmentMargin;
-    private int mGridSpace;
-    private int mSpanCount;
+    private int mGridOffset;
 
-    public LevelsOffsetDecoration(Context context, int spanCount) {
-        mFragmentMargin = (int) context.getResources().getDimension(R.dimen.select_level_fragment__margin);
-        mGridSpace = (int) context.getResources().getDimension(R.dimen.select_level_fragment__grid_margin);
-
-        mSpanCount = spanCount;
+    public LevelsOffsetDecoration(Context context) {
+        mGridOffset = (int) context.getResources().getDimension(R.dimen.select_level_fragment__grid_horizontal_offset);
     }
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         super.getItemOffsets(outRect, view, parent, state);
 
-        int count = parent.getAdapter().getItemCount();
-        int position = parent.getChildAdapterPosition(view);
-        int row = position % mSpanCount;
-
-//        if (position == 0) {
-//            outRect.set(mFragmentMargin, mFragmentMargin, mGridSpace, mGridSpace);
-//        } else if (position == 1) {
-//            outRect.set(mFragmentMargin, 0, mGridSpace, mFragmentMargin);
-//        } else if (position == count - 2) {
-//            outRect.set(0, mFragmentMargin, mFragmentMargin, mGridSpace);
-//        } else if (position == count - 1) {
-//            outRect.set(0, 0, mFragmentMargin, mFragmentMargin);
-//        } else if (row == 0) {
-//            outRect.set(0, mFragmentMargin, mGridSpace, mGridSpace);
-//        } else {
-//            outRect.set(0, 0, mGridSpace, mFragmentMargin);
-//        }
-
-        if (position == 0) {
-            outRect.set(mFragmentMargin, 0, mGridSpace, 0);
-        } else if (position == 1) {
-            outRect.set(mFragmentMargin, 0, mGridSpace, 0);
-        } else if (position == count - 2) {
-            outRect.set(0, 0, mFragmentMargin, 0);
-        } else if (position == count - 1) {
-            outRect.set(0, 0, mFragmentMargin, 0);
-        } else if (row == 0) {
-            outRect.set(0, 0, mGridSpace, 0);
-        } else {
-            outRect.set(0, 0, mGridSpace, 0);
-        }
+        outRect.set(mGridOffset/2, 0, mGridOffset/2, 0);
     }
 
+    public int getGridOffset() {
+        return mGridOffset;
+    }
 }

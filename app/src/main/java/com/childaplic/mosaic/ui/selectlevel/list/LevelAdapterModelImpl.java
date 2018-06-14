@@ -60,11 +60,4 @@ class LevelAdapterModelImpl implements LevelAdapterModel {
 
     // endregion
 
-
-    // region Public Methods
-
-
-
-    // endregion
-
 }

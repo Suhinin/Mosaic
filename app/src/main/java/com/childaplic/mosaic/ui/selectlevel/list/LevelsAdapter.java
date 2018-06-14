@@ -21,8 +21,8 @@ public class LevelsAdapter extends RecyclerView.Adapter<LevelViewHolder> {
 
     private final String TAG = LevelsAdapter.class.getCanonicalName();
 
-    private final int SCREEN_COLUMN_COUNT = 3;
-    private final int SCREEN_ROW_COUNT = 2;
+    public static final int SCREEN_COLUMN_COUNT = 3;
+    public static final int SCREEN_ROW_COUNT = 2;
 
     // endregion
 
@@ -107,12 +107,11 @@ public class LevelsAdapter extends RecyclerView.Adapter<LevelViewHolder> {
     // region Private Methods
 
     private void calcItemSize() {
-        int fragmentMargin = (int) mContext.getResources().getDimension(R.dimen.select_level_fragment__margin);
-        int gridMargin = (int) mContext.getResources().getDimension(R.dimen.select_level_fragment__grid_margin);
+        int gridOffset = (int) mContext.getResources().getDimension(R.dimen.select_level_fragment__grid_horizontal_offset);
 
         Size screenSize = ScreenUtil.getScreenSize(mContext);
-        int width = (screenSize.getWidth() - 2*fragmentMargin - (SCREEN_COLUMN_COUNT -1)*gridMargin) / SCREEN_COLUMN_COUNT;
-        int height = (screenSize.getHeight() - 2*fragmentMargin - (SCREEN_ROW_COUNT -1)*gridMargin) / SCREEN_ROW_COUNT;
+        int width = (screenSize.getWidth() - (SCREEN_COLUMN_COUNT + 1) * gridOffset) / SCREEN_COLUMN_COUNT;
+        int height = (screenSize.getHeight() - (SCREEN_ROW_COUNT + 1) * gridOffset) / SCREEN_ROW_COUNT;
 
         mItemSize = new Size(width, height);
     }

@@ -3,8 +3,7 @@
 
     <!-- region SelectLevelFragment -->
 
-    <dimen name="select_level_fragment__margin">10dp</dimen>
-    <dimen name="select_level_fragment__grid_margin">15dp</dimen>
+    <dimen name="select_level_fragment__grid_horizontal_offset">10dp</dimen>
 
     <!-- endregion -->
 

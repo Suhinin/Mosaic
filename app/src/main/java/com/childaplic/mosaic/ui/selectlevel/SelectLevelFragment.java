@@ -2,12 +2,10 @@ package com.childaplic.mosaic.ui.selectlevel;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
-import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.view.LayoutInflater;
@@ -37,7 +35,6 @@ public class SelectLevelFragment extends DaggerFragment implements SelectLevelCo
 
     private final String ASSETS_BACKGROUND = "images/board/bg_board.png";
 
-    private final int GRID_ROWS_COUNT = 2;
     private final String SHARED__FIRST_VISIBLE_LIST_POSITION = "shared__first_visible_list_position";
 
     // endregion
@@ -69,6 +66,7 @@ public class SelectLevelFragment extends DaggerFragment implements SelectLevelCo
 
     private RecyclerView mRecyclerView;
     private GridLayoutManager mGridLayoutManager;
+    private SnapHelper mSnapHelper;
 
     // endregion
 
@@ -172,15 +170,17 @@ public class SelectLevelFragment extends DaggerFragment implements SelectLevelCo
     }
 
     private void initGridLayoutManager() {
-        mGridLayoutManager = new GridLayoutManager(getContext(), GRID_ROWS_COUNT);
+        mGridLayoutManager = new GridLayoutManager(getContext(), LevelsAdapter.SCREEN_ROW_COUNT);
         mGridLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
     }
 
     private void addLevelsListView() {
+        LevelsOffsetDecoration offsetDecoration = new LevelsOffsetDecoration(getContext());
+
         mRecyclerView = new RecyclerView(getContext());
         mRecyclerView.setLayoutManager(mGridLayoutManager);
         mRecyclerView.setAdapter(mLevelsAdapter);
-        mRecyclerView.addItemDecoration(new LevelsOffsetDecoration(getContext(), GRID_ROWS_COUNT));
+        mRecyclerView.addItemDecoration(offsetDecoration);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator() {
             @Override
@@ -188,13 +188,17 @@ public class SelectLevelFragment extends DaggerFragment implements SelectLevelCo
                 return true;
             }
         });
+        mRecyclerView.setClipToPadding(false);
+
+        int gridOffset = offsetDecoration.getGridOffset();
+        mRecyclerView.setPadding(gridOffset/2, 0, gridOffset/2, 0);
 
         mRootView.addView(mRecyclerView, LayoutHelper.createFramePx(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
     }
 
     private void initSnapHelper() {
-        SnapHelper helper = new LinearSnapHelper();
-        helper.attachToRecyclerView(mRecyclerView);
+        mSnapHelper = new LinearSnapHelper();
+        mSnapHelper.attachToRecyclerView(mRecyclerView);
     }
 
     // endregion
