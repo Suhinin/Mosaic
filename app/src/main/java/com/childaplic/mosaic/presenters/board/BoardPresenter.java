@@ -39,7 +39,6 @@ public class BoardPresenter implements BoardContract.Presenter {
     private Level mLevel;
     private long mLevelRequestTimeMillis;
 
-    private InitState mInitState;
     private String mInitErrorMsg;
 
     private PalettePieceItem[] mPalette;
@@ -73,7 +72,6 @@ public class BoardPresenter implements BoardContract.Presenter {
         mIncorrectAnswersCount = 0;
 
         mSoundEnabled = true;
-        mInitState = InitState.NONE;
     }
 
     // endregion
@@ -85,7 +83,7 @@ public class BoardPresenter implements BoardContract.Presenter {
     public void onAttachView(BoardContract.View view) {
         mView = view;
 
-        if (mInitState == InitState.NONE || needRequestLevel()) {
+        if (needRequestLevel()) {
             startInitTask();
         }
 
@@ -158,10 +156,12 @@ public class BoardPresenter implements BoardContract.Presenter {
 
     // region Private Methods
 
+    private boolean needRequestLevel() {
+        return mLevelsLogic.getLevelSelectedTimeMillis() > mLevelRequestTimeMillis;
+    }
+
     @SuppressLint("CheckResult")
     private void startInitTask() {
-        mInitState = InitState.LOADING;
-
         Completable
                 .fromAction(new Action() {
                     @Override
@@ -174,7 +174,7 @@ public class BoardPresenter implements BoardContract.Presenter {
                 .subscribe(new Action() {
                     @Override
                     public void run() throws Exception {
-                        mInitState = InitState.COMPLETE;
+                        mLevelRequestTimeMillis = System.currentTimeMillis();
                         mView.onInit();
                     }
                 }, new Consumer<Throwable>() {
@@ -182,7 +182,6 @@ public class BoardPresenter implements BoardContract.Presenter {
                     public void accept(Throwable throwable) throws Exception {
                         Log.e(TAG, "startInitTask error: " + throwable.getMessage());
                         mInitErrorMsg = throwable.getMessage();
-                        mInitState = InitState.ERROR;
                         mView.onInitError(throwable.getMessage());
                     }
                 });
@@ -192,8 +191,6 @@ public class BoardPresenter implements BoardContract.Presenter {
         mLevel = mLevelsLogic.getCurrentLevel();
         initBoard();
         createPalette(mLevel.getPalette());
-
-        mLevelRequestTimeMillis = System.currentTimeMillis();
     }
 
     private void initBoard() {
@@ -309,10 +306,6 @@ public class BoardPresenter implements BoardContract.Presenter {
             case 2: return LevelState.TWO_STARS;
             case 3: return LevelState.THREE_STARS;
         }
-    }
-
-    private boolean needRequestLevel() {
-        return mLevelsLogic.getLevelSelectedTimeMillis() > mLevelRequestTimeMillis;
     }
 
     // endregion

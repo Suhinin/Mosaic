@@ -34,10 +34,10 @@ public class SelectLevelPresenter implements SelectLevelContract.Presenter {
 
     private SelectLevelContract.View mView;
 
-    private InitState mInitState;
-    private String mInitErrorMsg;
-
     private LevelItem[] mLevelItems;
+
+    private String mInitErrorMsg;
+    private long mLevelsRequestTimeMillis;
 
     // endregion
 
@@ -57,7 +57,7 @@ public class SelectLevelPresenter implements SelectLevelContract.Presenter {
         mLevelsLogic = levelsLogic;
         mLevelsRepository = levelsRepository;
 
-        mInitState = InitState.NONE;
+        mLevelItems = new LevelItem[0];
     }
 
     // endregion
@@ -69,7 +69,7 @@ public class SelectLevelPresenter implements SelectLevelContract.Presenter {
     public void onAttachView(SelectLevelContract.View view) {
         mView = view;
 
-        if (mInitState == InitState.NONE) {
+        if (needRequestLevels()) {
             startInitTask();
         }
     }
@@ -94,10 +94,12 @@ public class SelectLevelPresenter implements SelectLevelContract.Presenter {
 
     // region Private Methods
 
+    private boolean needRequestLevels() {
+        return mLevelsRequestTimeMillis <= 0;
+    }
+
     @SuppressLint("CheckResult")
     private void startInitTask() {
-        mInitState = InitState.LOADING;
-
         Completable
                 .fromAction(new Action() {
                     @Override
@@ -110,7 +112,7 @@ public class SelectLevelPresenter implements SelectLevelContract.Presenter {
                 .subscribe(new Action() {
                     @Override
                     public void run() throws Exception {
-                        mInitState = InitState.COMPLETE;
+                        mLevelsRequestTimeMillis = System.currentTimeMillis();
                         mView.onInit();
                     }
                 }, new Consumer<Throwable>() {
@@ -118,7 +120,6 @@ public class SelectLevelPresenter implements SelectLevelContract.Presenter {
                     public void accept(Throwable throwable) throws Exception {
                         Log.e(TAG, "startInitTask error: " + throwable.getMessage());
                         mInitErrorMsg = throwable.getMessage();
-                        mInitState = InitState.ERROR;
                         mView.onInitError(throwable.getMessage());
                     }
                 });
@@ -145,6 +146,7 @@ public class SelectLevelPresenter implements SelectLevelContract.Presenter {
         levelItem.setId(level.getId());
         levelItem.setNumber(level.getNumber());
         levelItem.setPreviewPath(level.getPreviewPath());
+        levelItem.setState(level.getState());
 
         return levelItem;
     }

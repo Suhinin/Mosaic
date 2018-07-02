@@ -65,7 +65,7 @@ public class LevelsRepositoryStandard implements LevelsRepository {
         level.setPreviewPath(defaultLevel.getPreviewPath());
         level.setPalette(defaultLevel.getPalette());
         level.setBoard(createBoard(defaultLevel.getBoard()));
-        level.setState(LevelState.OPEN);
+        level.setState(defaultLevel.isOpen() ? LevelState.OPEN : LevelState.DISABLED);
         level.setIncorrectAnswers(0);
         level.setShowOnBoarding(false);
 
@@ -130,7 +130,7 @@ public class LevelsRepositoryStandard implements LevelsRepository {
             level.setIncorrectAnswers(levelDto.getIncorrectAnswers());
             level.setBoard(deserializeBoard(levelDto.getBoardJson()));
         } else {
-            level.setState(LevelState.OPEN);
+            level.setState(levelData.isOpen() ? LevelState.OPEN : LevelState.DISABLED);
             level.setIncorrectAnswers(0);
             level.setBoard(createBoard(levelData.getBoard()));
         }

@@ -12,6 +12,13 @@ import com.childaplic.mosaic.utils.LayoutHelper;
 
 public class LevelItemView extends FrameLayout {
 
+    // region Constants
+
+    private final String COMPLETED_LEVEL_ICON_PATH = "images/selectlevel/ok.png";
+
+    // endregion
+
+
     // region Fields
 
     private Size mItemSize;
@@ -22,6 +29,7 @@ public class LevelItemView extends FrameLayout {
     // region View Components
 
     private ImageView mImagePreview;
+    private ImageView mImageComplete;
 
     // endregion
 
@@ -44,6 +52,15 @@ public class LevelItemView extends FrameLayout {
         GlideLoaderHelper.loadAssets(getContext(), assetsPath, mImagePreview);
     }
 
+    public void setCompleted(boolean isCompleted) {
+        if (isCompleted) {
+            mImageComplete.setVisibility(VISIBLE);
+            GlideLoaderHelper.loadAssets(getContext(), COMPLETED_LEVEL_ICON_PATH, mImageComplete);
+        } else {
+            mImageComplete.setVisibility(GONE);
+        }
+    }
+
     // endregion
 
 
@@ -51,6 +68,7 @@ public class LevelItemView extends FrameLayout {
 
     private void createView() {
         addPreviewImage();
+        addCompleteImage();
     }
 
     private void addPreviewImage() {
@@ -58,6 +76,13 @@ public class LevelItemView extends FrameLayout {
         mImagePreview.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
         addView(mImagePreview, LayoutHelper.createFramePx(mItemSize, Gravity.CENTER));
+    }
+
+    private void addCompleteImage() {
+        mImageComplete = new ImageView(getContext());
+        mImageComplete.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+        addView(mImageComplete, LayoutHelper.createFramePx(mItemSize.getWidth()/2, mItemSize.getHeight()/2, Gravity.CENTER));
     }
 
     // endregion
