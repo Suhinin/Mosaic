@@ -14,10 +14,16 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {
-        releaseConfig {
+        configSimple {
             keyAlias 'mosaic_origin'
             keyPassword ';rU#?D<.(33RPGk='
-            storeFile file('C:/Users/maxim/mosaic_origin_keystore.jks')
+            storeFile file('../mosaic_origin_keystore.jks')
+            storePassword ';rU#?D<.(33RPGk='
+        }
+        configEmoji {
+            keyAlias 'mosaic_emoji'
+            keyPassword ';rU#?D<.(33RPGk='
+            storeFile file('../mosaic_emoji_keystore.jks')
             storePassword ';rU#?D<.(33RPGk='
         }
     }
@@ -25,7 +31,6 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.releaseConfig
         }
         debug {
             ext.enableCrashlytics = false
@@ -35,8 +40,22 @@ android {
             debuggable true
         }
     }
-    flavorDimensions "clone"
+    flavorDimensions "mode", "clone"
     productFlavors {
+        simple {
+            dimension "mode"
+            applicationId "com.childaplic.mosaic.simple"
+            versionCode 16000 + android.defaultConfig.versionCode
+            versionNameSuffix "-simple"
+            signingConfig signingConfigs.configSimple
+        }
+        emoji {
+            dimension "mode"
+            applicationId "com.childaplic.mosaic.emoji"
+            versionCode 16000 + android.defaultConfig.versionCode
+            versionNameSuffix "-emoji"
+            signingConfig signingConfigs.configEmoji
+        }
         origin {
             dimension "clone"
             applicationIdSuffix ".origin"
@@ -52,6 +71,14 @@ android {
         tile {
             dimension "clone"
             applicationIdSuffix ".tile"
+        }
+    }
+    sourceSets {
+        simple {
+            setRoot 'src/simple'
+        }
+        emoji {
+            setRoot 'src/emoji'
         }
     }
 }
