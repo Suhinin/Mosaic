@@ -16,7 +16,10 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.childaplic.mosaic.presenters.selectlevel.LevelItem;
+import com.childaplic.mosaic.repositories.levels.domain.LevelState;
 import com.childaplic.mosaic.services.imageloader.ImageLoaderService;
+import com.childaplic.mosaic.services.payments.PaymentsListener;
+import com.childaplic.mosaic.services.payments.PaymentsService;
 import com.childaplic.mosaic.services.shared.SharedService;
 import com.childaplic.mosaic.ui.common.Size;
 import com.childaplic.mosaic.ui.selectlevel.list.LevelClickHandler;
@@ -48,6 +51,8 @@ public class SelectLevelFragment extends DaggerFragment implements SelectLevelCo
     protected ImageLoaderService mImageLoaderService;
     @Inject
     protected SharedService mSharedService;
+    @Inject
+    protected PaymentsService mPaymentsService;
 
     // endregion
 
@@ -56,6 +61,7 @@ public class SelectLevelFragment extends DaggerFragment implements SelectLevelCo
 
     private SelectLevelInteraction mInteractionListener;
     private LevelsAdapter mLevelsAdapter;
+    private boolean mIsLevelsClickable = true;
 
     // endregion
 
@@ -98,6 +104,8 @@ public class SelectLevelFragment extends DaggerFragment implements SelectLevelCo
         } else {
             throw new RuntimeException(context.toString() + " must implement SelectLevelInteraction");
         }
+
+        mPaymentsService.setListener(mPaymentsListener);
     }
 
     @Override
@@ -223,21 +231,49 @@ public class SelectLevelFragment extends DaggerFragment implements SelectLevelCo
         mSharedService.putInt(SHARED__FIRST_VISIBLE_LIST_POSITION, position);
     }
 
+    public void requestPayment() {
+        mPaymentsService.requestPayment(mPresenter.getLevelPriceUSD());
+    }
+
+    private void openSelectedLevel(LevelItem levelItem) {
+        mPresenter.selectLevel(levelItem.getId());
+        mInteractionListener.onLevelSelected();
+        mIsLevelsClickable = true;
+    }
+
     // endregion
 
 
     // region Listeners
 
     private LevelClickHandler mLevelClickHandler = new LevelClickHandler() {
-
         @Override
         public void onClick(View view, int adapterPosition) {
+            if (mIsLevelsClickable == false) {
+                return;
+            }
+
+            mIsLevelsClickable = false;
+
             LevelItem levelItem = mLevelsAdapter.getItem(adapterPosition);
-            mPresenter.selectLevel(levelItem);
-
-            mInteractionListener.onLevelSelected();
+            if (levelItem.getState() == LevelState.DISABLED) {
+                requestPayment();
+            } else {
+                openSelectedLevel(levelItem);
+            }
         }
+    };
 
+    private PaymentsListener mPaymentsListener = new PaymentsListener() {
+        @Override
+        public void onResult(boolean isSuccess) {
+            if (isSuccess) {
+                mPresenter.openAllLevels();
+                updateList();
+            }
+
+            mIsLevelsClickable = true;
+        }
     };
 
     // endregion

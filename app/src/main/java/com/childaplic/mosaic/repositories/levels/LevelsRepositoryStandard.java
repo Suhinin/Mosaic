@@ -98,6 +98,18 @@ public class LevelsRepositoryStandard implements LevelsRepository {
         insertOrUpdateLevel(levelDto);
     }
 
+    @Override
+    public void openAllLevels() {
+        for (Level level : mLevels.values()) {
+            if (level.getState() == LevelState.DISABLED) {
+                level.setState(LevelState.OPEN);
+
+                LevelDto levelDto = toLevelDto(level);
+                insertOrUpdateLevel(levelDto);
+            }
+        }
+    }
+
     // endregion
 
 

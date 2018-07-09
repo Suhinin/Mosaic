@@ -1,7 +1,6 @@
 package com.childaplic.mosaic.presenters.selectlevel;
 
 import android.annotation.SuppressLint;
-import android.os.Handler;
 import android.util.Log;
 
 import java.util.Arrays;
@@ -12,7 +11,6 @@ import javax.inject.Inject;
 import com.childaplic.mosaic.businesslogics.LevelsLogic;
 import com.childaplic.mosaic.repositories.levels.LevelsRepository;
 import com.childaplic.mosaic.repositories.levels.domain.Level;
-import com.childaplic.mosaic.repositories.levels.domain.LevelNull;
 import com.childaplic.mosaic.ui.selectlevel.SelectLevelContract;
 import com.childaplic.mosaic.ui.selectlevel.SelectLevelViewNull;
 import io.reactivex.Completable;
@@ -85,8 +83,19 @@ public class SelectLevelPresenter implements SelectLevelContract.Presenter {
     }
 
     @Override
-    public void selectLevel(LevelItem levelItem) {
-        mLevelsLogic.setCurrentLevelId(levelItem.getId());
+    public void selectLevel(String levelId) {
+        mLevelsLogic.setCurrentLevelId(levelId);
+    }
+
+    @Override
+    public void openAllLevels() {
+        mLevelsRepository.openAllLevels();
+        createLevelItems();
+    }
+
+    @Override
+    public String getLevelPriceUSD() {
+        return "0.00";
     }
 
     // endregion

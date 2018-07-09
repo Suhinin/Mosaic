@@ -19,11 +19,6 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".ui.main.MainActivity"
-            android:screenOrientation="landscape"
-            android:launchMode="singleTop"/>
-
-        <activity
             android:name=".ui.splash.SplashActivity"
             android:noHistory="true"
             android:theme="@style/SplashTheme"
@@ -35,9 +30,21 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ui.main.MainActivity"
+            android:screenOrientation="landscape"
+            android:launchMode="singleTop"/>
+
+        <activity
+            android:name=".ui.payment.PaymentActivity" />
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="15abbe116f174a4a05a716869e42f83a6e9f5e0c" />
+
+        <meta-data
+            android:name="com.google.android.gms.wallet.api.enabled"
+            android:value="true" />
 
         <!--<receiver android:name=".broadcasts.AlarmNotificationPublisher" />-->
         <!--<receiver android:name=".broadcasts.AlarmNotificationReceiver"/>-->

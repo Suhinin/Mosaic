@@ -10,6 +10,8 @@ import com.childaplic.mosaic.services.imageloader.ImageLoaderService;
 import com.childaplic.mosaic.services.imageloader.ImageLoaderStandard;
 import com.childaplic.mosaic.services.logger.LoggerFabric;
 import com.childaplic.mosaic.services.logger.LoggerService;
+import com.childaplic.mosaic.services.payments.PaymentsService;
+import com.childaplic.mosaic.services.payments.PaymentsServiceGoogle;
 import com.childaplic.mosaic.services.shared.SharedPreferencesService;
 import com.childaplic.mosaic.services.shared.SharedService;
 import com.childaplic.mosaic.services.sqlite.DBManager;
@@ -54,6 +56,12 @@ public class ServicesModule {
     @Provides
     @Singleton
     public ImageLoaderService provideImageLoader(ImageLoaderStandard service) {
+        return service;
+    }
+
+    @Provides
+    @Singleton
+    public PaymentsService providePayments(PaymentsServiceGoogle service) {
         return service;
     }
 //

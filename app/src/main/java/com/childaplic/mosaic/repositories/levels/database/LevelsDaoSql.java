@@ -5,6 +5,7 @@ import android.database.Cursor;
 
 import javax.inject.Inject;
 
+import com.childaplic.mosaic.repositories.levels.domain.LevelState;
 import com.childaplic.mosaic.services.sqlite.DBManager;
 
 
