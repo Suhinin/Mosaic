@@ -62,14 +62,6 @@ android {
             applicationIdSuffix ".tile"
         }
     }
-    sourceSets {
-        simple {
-            setRoot 'src/simple'
-        }
-        emoji {
-            setRoot 'src/emoji'
-        }
-    }
 }
 
 def DaggerVersion = "2.11"

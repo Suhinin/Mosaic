@@ -335,7 +335,7 @@
       {
         "row": 8,
         "col": 4,
-        "piece_id": "black"
+        "piece_id": "yellow"
       },
       {
         "row": 8,
@@ -345,7 +345,7 @@
       {
         "row": 8,
         "col": 6,
-        "piece_id": "yellow"
+        "piece_id": "black"
       },
       {
         "row": 8,
