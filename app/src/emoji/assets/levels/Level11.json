@@ -1,7 +1,6 @@
 {
-  "number": 8,
-  "open": true,
-  "preview_path": "images/previews/picture_8.png",
+  "number": 11,
+  "preview_path": "images/previews/smile_11.png",
   "palette": [
     {
       "piece_id": "black",
@@ -9,24 +8,9 @@
       "image_path": "images/palette/black.png"
     },
     {
-      "piece_id": "blue",
-      "color_hex": "#0000FF",
-      "image_path": "images/palette/blue.png"
-    },
-    {
-      "piece_id": "green",
-      "color_hex": "#008000",
-      "image_path": "images/palette/green.png"
-    },
-    {
       "piece_id": "heavenly",
       "color_hex": "#76affc",
       "image_path": "images/palette/heavenly.png"
-    },
-    {
-      "piece_id": "orange",
-      "color_hex": "#FFA500",
-      "image_path": "images/palette/orange.png"
     },
     {
       "piece_id": "pink",
@@ -54,19 +38,19 @@
     "columns": 11,
     "filled_cells": [
       {
-        "row": 0,
-        "col": 6,
-        "piece_id": "red"
+        "row": 1,
+        "col": 3,
+        "piece_id": "yellow"
       },
       {
-        "row": 0,
-        "col": 7,
-        "piece_id": "red"
+        "row": 1,
+        "col": 4,
+        "piece_id": "yellow"
       },
       {
         "row": 1,
         "col": 5,
-        "piece_id": "red"
+        "piece_id": "yellow"
       },
       {
         "row": 1,
@@ -79,19 +63,24 @@
         "piece_id": "yellow"
       },
       {
-        "row": 1,
-        "col": 8,
-        "piece_id": "red"
+        "row": 2,
+        "col": 2,
+        "piece_id": "yellow"
       },
       {
         "row": 2,
         "col": 3,
-        "piece_id": "black"
+        "piece_id": "yellow"
+      },
+      {
+        "row": 2,
+        "col": 4,
+        "piece_id": "yellow"
       },
       {
         "row": 2,
         "col": 5,
-        "piece_id": "red"
+        "piece_id": "yellow"
       },
       {
         "row": 2,
@@ -106,22 +95,37 @@
       {
         "row": 2,
         "col": 8,
-        "piece_id": "red"
+        "piece_id": "yellow"
+      },
+      {
+        "row": 3,
+        "col": 1,
+        "piece_id": "yellow"
+      },
+      {
+        "row": 3,
+        "col": 2,
+        "piece_id": "yellow"
+      },
+      {
+        "row": 3,
+        "col": 3,
+        "piece_id": "yellow"
       },
       {
         "row": 3,
         "col": 4,
-        "piece_id": "black"
+        "piece_id": "yellow"
       },
       {
         "row": 3,
         "col": 5,
-        "piece_id": "red"
+        "piece_id": "yellow"
       },
       {
         "row": 3,
         "col": 6,
-        "piece_id": "red"
+        "piece_id": "yellow"
       },
       {
         "row": 3,
@@ -131,87 +135,107 @@
       {
         "row": 3,
         "col": 8,
-        "piece_id": "red"
+        "piece_id": "yellow"
+      },
+      {
+        "row": 3,
+        "col": 9,
+        "piece_id": "yellow"
+      },
+      {
+        "row": 4,
+        "col": 1,
+        "piece_id": "black"
       },
       {
         "row": 4,
         "col": 2,
-        "piece_id": "red"
+        "piece_id": "yellow"
       },
       {
         "row": 4,
         "col": 3,
-        "piece_id": "red"
+        "piece_id": "yellow"
       },
       {
         "row": 4,
         "col": 4,
-        "piece_id": "red"
-      },
-      {
-        "row": 4,
-        "col": 5,
         "piece_id": "black"
       },
       {
         "row": 4,
+        "col": 5,
+        "piece_id": "yellow"
+      },
+      {
+        "row": 4,
         "col": 6,
-        "piece_id": "red"
+        "piece_id": "black"
       },
       {
         "row": 4,
         "col": 7,
-        "piece_id": "red"
+        "piece_id": "yellow"
+      },
+      {
+        "row": 4,
+        "col": 8,
+        "piece_id": "yellow"
+      },
+      {
+        "row": 4,
+        "col": 9,
+        "piece_id": "black"
       },
       {
         "row": 5,
         "col": 1,
-        "piece_id": "red"
+        "piece_id": "yellow"
       },
       {
         "row": 5,
         "col": 2,
-        "piece_id": "yellow"
+        "piece_id": "black"
       },
       {
         "row": 5,
         "col": 3,
-        "piece_id": "yellow"
+        "piece_id": "black"
       },
       {
         "row": 5,
         "col": 4,
-        "piece_id": "red"
+        "piece_id": "yellow"
       },
       {
         "row": 5,
         "col": 5,
-        "piece_id": "red"
+        "piece_id": "yellow"
       },
       {
         "row": 5,
         "col": 6,
+        "piece_id": "yellow"
+      },
+      {
+        "row": 5,
+        "col": 7,
         "piece_id": "black"
       },
       {
         "row": 5,
         "col": 8,
-        "piece_id": "red"
+        "piece_id": "black"
       },
       {
         "row": 5,
         "col": 9,
         "piece_id": "yellow"
-      },
-      {
-        "row": 5,
-        "col": 10,
-        "piece_id": "red"
       },
       {
         "row": 6,
         "col": 1,
-        "piece_id": "red"
+        "piece_id": "yellow"
       },
       {
         "row": 6,
@@ -231,83 +255,133 @@
       {
         "row": 6,
         "col": 5,
-        "piece_id": "red"
-      },
-      {
-        "row": 3,
-        "col": 7,
-        "piece_id": "black"
+        "piece_id": "yellow"
       },
       {
         "row": 6,
-        "col": 8,
-        "piece_id": "red"
-      },
-      {
-        "row": 6,
-        "col": 9,
-        "piece_id": "red"
-      },
-      {
-        "row": 6,
-        "col": 10,
-        "piece_id": "red"
-      },
-      {
-        "row": 7,
-        "col": 2,
-        "piece_id": "red"
-      },
-      {
-        "row": 7,
-        "col": 3,
-        "piece_id": "red"
-      },
-      {
-        "row": 7,
-        "col": 4,
-        "piece_id": "red"
-      },
-      {
-        "row": 7,
-        "col": 6,
-        "piece_id": "red"
-      },
-      {
-        "row": 7,
-        "col": 7,
-        "piece_id": "red"
-      },
-      {
-        "row": 7,
-        "col": 8,
-        "piece_id": "black"
-      },
-      {
-        "row": 8,
         "col": 6,
         "piece_id": "yellow"
       },
       {
-        "row": 8,
+        "row": 6,
         "col": 7,
-        "piece_id": "red"
+        "piece_id": "yellow"
+},
+      {
+        "row": 6,
+        "col": 8,
+        "piece_id": "yellow"
+      },
+      {
+        "row": 6,
+        "col": 9,
+        "piece_id": "yellow"
+      },
+      {
+        "row": 7,
+        "col": 1,
+        "piece_id": "yellow"
+      },
+      {
+        "row": 7,
+        "col": 2,
+        "piece_id": "yellow"
+      },
+      {
+        "row": 7,
+        "col": 3,
+        "piece_id": "black"
+      },
+      {
+        "row": 7,
+        "col": 4,
+        "piece_id": "yellow"
+      },
+      {
+        "row": 7,
+        "col": 5,
+        "piece_id": "yellow"
+      },
+      {
+        "row": 7,
+        "col": 6,
+        "piece_id": "yellow"
+      },
+      {
+        "row": 7,
+        "col": 7,
+        "piece_id": "black"
+      },
+      {
+        "row": 7,
+        "col": 8,
+        "piece_id": "yellow"
+      },
+      {
+        "row": 7,
+        "col": 9,
+        "piece_id": "yellow"
       },
       {
         "row": 8,
-        "col": 9,
+        "col": 2,
+        "piece_id": "yellow"
+      },
+      {
+        "row": 8,
+        "col": 3,
+        "piece_id": "yellow"
+      },
+      {
+        "row": 8,
+        "col": 4,
         "piece_id": "black"
+      },
+      {
+        "row": 8,
+        "col": 5,
+        "piece_id": "black"
+      },
+      {
+        "row": 8,
+        "col": 6,
+        "piece_id": "black"
+      },
+      {
+        "row": 8,
+        "col": 7,
+        "piece_id": "yellow"
+      },
+      {
+        "row": 8,
+        "col": 8,
+        "piece_id": "yellow"
+      },
+      {
+        "row": 9,
+        "col": 3,
+        "piece_id": "yellow"
+      },
+      {
+        "row": 9,
+        "col": 4,
+        "piece_id": "yellow"
+      },
+      {
+        "row": 9,
+        "col": 5,
+        "piece_id": "yellow"
       },
       {
         "row": 9,
         "col": 6,
-        "piece_id": "red"
+        "piece_id": "yellow"
       },
       {
         "row": 9,
         "col": 7,
-        "piece_id": "red"
-      }
+        "piece_id": "yellow"
+      } 
     ]
   }
 }

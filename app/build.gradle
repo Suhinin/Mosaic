@@ -17,7 +17,7 @@ android {
         releaseConfig {
             keyAlias 'mosaic_origin'
             keyPassword ';rU#?D<.(33RPGk='
-            storeFile file('C:/Users/maxim/mosaic_origin_keystore.jks')
+            storeFile file('mosaic_keystore.jks')
             storePassword ';rU#?D<.(33RPGk='
         }
     }
@@ -35,8 +35,16 @@ android {
             debuggable true
         }
     }
-    flavorDimensions "clone"
+    flavorDimensions "mode", "clone"
     productFlavors {
+        simple {
+            dimension "mode"
+            applicationId "com.childaplic.mosaic.simple"
+        }
+        emoji {
+            dimension "mode"
+            applicationId "com.childaplic.mosaic.emoji"
+        }
         origin {
             dimension "clone"
             applicationIdSuffix ".origin"
