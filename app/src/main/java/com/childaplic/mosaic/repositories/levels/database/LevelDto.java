@@ -5,7 +5,6 @@ public class LevelDto {
     private String mId;
     private String mState;
     private boolean mIsShowOnBoarding;
-    private int mIncorrectAnswers;
     private String mBoardJson;
 
     public String getId() {
@@ -30,14 +29,6 @@ public class LevelDto {
 
     public void setShowOnBoarding(boolean showOnBoarding) {
         mIsShowOnBoarding = showOnBoarding;
-    }
-
-    public int getIncorrectAnswers() {
-        return mIncorrectAnswers;
-    }
-
-    public void setIncorrectAnswers(int count) {
-        mIncorrectAnswers = count;
     }
 
     public String getBoardJson() {

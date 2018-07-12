@@ -66,7 +66,6 @@ public class LevelsRepositoryStandard implements LevelsRepository {
         level.setPalette(defaultLevel.getPalette());
         level.setBoard(createBoard(defaultLevel.getBoard()));
         level.setState(defaultLevel.isOpen() ? LevelState.OPEN : LevelState.DISABLED);
-        level.setIncorrectAnswers(0);
         level.setShowOnBoarding(false);
 
         saveLevel(level);
@@ -139,11 +138,9 @@ public class LevelsRepositoryStandard implements LevelsRepository {
         LevelDto levelDto = mLevelsDao.getById(levelData.getId());
         if (levelDto != null) {
             level.setState(LevelState.fromString(levelDto.getState()));
-            level.setIncorrectAnswers(levelDto.getIncorrectAnswers());
             level.setBoard(deserializeBoard(levelDto.getBoardJson()));
         } else {
             level.setState(levelData.isOpen() ? LevelState.OPEN : LevelState.DISABLED);
-            level.setIncorrectAnswers(0);
             level.setBoard(createBoard(levelData.getBoard()));
         }
 
@@ -175,7 +172,6 @@ public class LevelsRepositoryStandard implements LevelsRepository {
         dto.setId(level.getId());
         dto.setState(level.getState().toString());
         dto.setShowOnBoarding(level.isShowOnBoarding());
-        dto.setIncorrectAnswers(level.getIncorrectAnswers());
         dto.setBoardJson(serializeBoard(level.getBoard()));
 
         return dto;

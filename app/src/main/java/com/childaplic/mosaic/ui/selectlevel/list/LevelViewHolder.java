@@ -67,9 +67,7 @@ class LevelViewHolder extends RecyclerView.ViewHolder {
 
     private void bindCompleted() {
         switch (mAdapterModel.getState()) {
-            case ONE_STAR:
-            case TWO_STARS:
-            case THREE_STARS:
+            case COMPLETED:
                 mLevelItemView.setCompleted(true);
                 break;
             default:

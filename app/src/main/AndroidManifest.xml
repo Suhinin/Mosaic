@@ -36,7 +36,8 @@
             android:launchMode="singleTop"/>
 
         <activity
-            android:name=".ui.payment.PaymentActivity" />
+            android:name=".ui.payment.PaymentActivity"
+            android:screenOrientation="landscape" />
 
         <meta-data
             android:name="io.fabric.ApiKey"

@@ -80,12 +80,7 @@ public class SelectLevelFragment extends DaggerFragment implements SelectLevelCo
     // region Constructors
 
     public static SelectLevelFragment newInstance() {
-        Bundle args = new Bundle();
-
-        SelectLevelFragment fragment = new SelectLevelFragment();
-        fragment.setArguments(args);
-
-        return fragment;
+        return new SelectLevelFragment();
     }
 
     // endregion
@@ -117,6 +112,7 @@ public class SelectLevelFragment extends DaggerFragment implements SelectLevelCo
     public void onResume() {
         super.onResume();
 
+        mIsLevelsClickable = true;
         mPresenter.onAttachView(this);
     }
 

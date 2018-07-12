@@ -27,8 +27,6 @@ public interface BoardContract {
 
         void resetBoard();
 
-        void incIncorrectCount();
-
         void levelCompleted();
 
         void hookPiece(int row, int col);

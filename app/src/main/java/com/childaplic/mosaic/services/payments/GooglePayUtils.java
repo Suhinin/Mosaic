@@ -64,13 +64,14 @@ public class GooglePayUtils {
 
     private static PaymentDataRequest createPaymentDataRequest(TransactionInfo transactionInfo, PaymentMethodTokenizationParameters params) {
         PaymentDataRequest request = PaymentDataRequest.newBuilder()
+                .setPhoneNumberRequired(false)
+                .setEmailRequired(true)
+                .setShippingAddressRequired(true)
                 .setTransactionInfo(transactionInfo)
                 .addAllowedPaymentMethods(GooglePayConstants.SUPPORTED_METHODS)
                 .setCardRequirements(CardRequirements.newBuilder()
                         .addAllowedCardNetworks(GooglePayConstants.SUPPORTED_NETWORKS)
                         .setAllowPrepaidCards(true)
-                        .setBillingAddressRequired(true)
-                        .setBillingAddressFormat(WalletConstants.BILLING_ADDRESS_FORMAT_FULL)
                         .build())
                 .setPaymentMethodTokenizationParameters(params)
                 .setUiRequired(true)

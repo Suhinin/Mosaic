@@ -38,16 +38,6 @@ public class LevelNull implements Level {
     }
 
     @Override
-    public int getIncorrectAnswers() {
-        return 0;
-    }
-
-    @Override
-    public void setIncorrectAnswers(int count) {
-        // empty stub
-    }
-
-    @Override
     public PalettePiece[] getPalette() {
         return new PalettePiece[0];
     }

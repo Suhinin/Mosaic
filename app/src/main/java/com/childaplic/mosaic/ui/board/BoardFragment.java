@@ -553,7 +553,6 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
                                 playSound(mSoundCorrectChecked);
                             }
                         } else {
-                            mPresenter.incIncorrectCount();
                             playSound(mSoundIncorrectChecked);
                             moveHome(mMovedPiece);
                         }

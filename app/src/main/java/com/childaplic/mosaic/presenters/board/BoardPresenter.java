@@ -27,8 +27,6 @@ public class BoardPresenter implements BoardContract.Presenter {
 
     private final String TAG = BoardPresenter.class.getCanonicalName();
 
-    private final int STARS_COUNT = 3;
-
     // endregion
 
 
@@ -43,8 +41,6 @@ public class BoardPresenter implements BoardContract.Presenter {
 
     private PalettePieceItem[] mPalette;
     private CellItem[][] mBoard;
-
-    private int mIncorrectAnswersCount;
 
     private Handler mNextLevelHandler;
     private boolean mSoundEnabled;
@@ -69,7 +65,6 @@ public class BoardPresenter implements BoardContract.Presenter {
 
         mPalette = new PalettePieceItem[0];
         mBoard = new CellItem[0][];
-        mIncorrectAnswersCount = 0;
 
         mSoundEnabled = true;
     }
@@ -93,7 +88,10 @@ public class BoardPresenter implements BoardContract.Presenter {
     @Override
     public void onDetachView() {
         mView = new BoardViewNull();
-        saveLevelState();
+
+        mLevel.setBoard(getBoardCells());
+        mLevelsRepository.saveLevel(mLevel);
+
         releaseNextLevelHandler();
     }
 
@@ -117,21 +115,17 @@ public class BoardPresenter implements BoardContract.Presenter {
 
     @Override
     public void resetBoard() {
-        mIncorrectAnswersCount = 0;
-
         mLevel = mLevelsRepository.resetLevel(mLevel.getId());
         initBoard();
         mLevelRequestTimeMillis = System.currentTimeMillis();
     }
 
     @Override
-    public void incIncorrectCount() {
-        mIncorrectAnswersCount++;
-    }
-
-    @Override
     public void levelCompleted() {
-        saveLevelState();
+        mLevel.setState(LevelState.COMPLETED);
+        mLevel.setBoard(getBoardCells());
+        mLevelsRepository.saveLevel(mLevel);
+
         mNextLevelHandler.postDelayed(mNextLevelRunnable, 4000);
     }
 
@@ -248,14 +242,6 @@ public class BoardPresenter implements BoardContract.Presenter {
         }
     };
 
-    private void saveLevelState() {
-        int levelStars = calculateLevelStars();
-        mLevel.setState(getLevelState(levelStars));
-        mLevel.setIncorrectAnswers(mIncorrectAnswersCount);
-        mLevel.setBoard(getBoardCells());
-        mLevelsRepository.saveLevel(mLevel);
-    }
-
     private Cell[][] getBoardCells() {
         int rows = mBoard.length;
         int cols = mBoard.length > 0 ? mBoard[0].length : 0;
@@ -277,35 +263,6 @@ public class BoardPresenter implements BoardContract.Presenter {
         cell.setPicked(cellItem.isPicked());
 
         return cell;
-    }
-
-    private int calculateLevelStars() {
-        int correctAnswers = calculateCorrectAnswers();
-
-        int allAnswers = correctAnswers + mIncorrectAnswersCount;
-        float percent = (float) correctAnswers / allAnswers;
-        return Math.round(percent * STARS_COUNT);
-    }
-
-    private int calculateCorrectAnswers() {
-        int answers = 0;
-        for(int i=0; i<mBoard.length; i++) {
-            for (int j=0; j<mBoard[i].length; j++) {
-                answers += mBoard[i][j] != null ? 1 : 0;
-            }
-        }
-
-        return answers;
-    }
-
-    private LevelState getLevelState(int stars) {
-        switch (stars) {
-            default:
-            case 0: return LevelState.OPEN;
-            case 1: return LevelState.ONE_STAR;
-            case 2: return LevelState.TWO_STARS;
-            case 3: return LevelState.THREE_STARS;
-        }
     }
 
     // endregion

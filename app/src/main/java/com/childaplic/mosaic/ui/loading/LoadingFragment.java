@@ -52,12 +52,7 @@ public class LoadingFragment extends DaggerFragment implements LoadingContract.V
     // region Constructors
 
     public static LoadingFragment newInstance() {
-        Bundle args = new Bundle();
-
-        LoadingFragment fragment = new LoadingFragment();
-        fragment.setArguments(args);
-
-        return fragment;
+        return new LoadingFragment();
     }
 
     // endregion
