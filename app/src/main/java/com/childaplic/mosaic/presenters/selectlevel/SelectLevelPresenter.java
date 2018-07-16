@@ -88,8 +88,8 @@ public class SelectLevelPresenter implements SelectLevelContract.Presenter {
     }
 
     @Override
-    public void openAllLevels() {
-        mLevelsRepository.openAllLevels();
+    public void enablePaidVersion() {
+        mLevelsLogic.enablePaidVersion();
         createLevelItems();
     }
 

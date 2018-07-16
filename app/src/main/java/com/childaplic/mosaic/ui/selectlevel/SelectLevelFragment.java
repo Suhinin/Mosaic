@@ -264,7 +264,7 @@ public class SelectLevelFragment extends DaggerFragment implements SelectLevelCo
         @Override
         public void onResult(boolean isSuccess) {
             if (isSuccess) {
-                mPresenter.openAllLevels();
+                mPresenter.enablePaidVersion();
                 updateList();
             }
 

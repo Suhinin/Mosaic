@@ -8,9 +8,6 @@ import java.util.List;
 
 public class GooglePayConstants {
 
-    // Changing this to ENVIRONMENT_PRODUCTION will make the API return real card information.
-    // Please refer to the documentation to read about the required steps needed to enable
-    // ENVIRONMENT_PRODUCTION.
     public static final int PAYMENTS_ENVIRONMENT = WalletConstants.ENVIRONMENT_TEST;
 
     public static final List<Integer> SUPPORTED_NETWORKS = Arrays.asList(

@@ -347,12 +347,12 @@ public class PaymentActivity extends DaggerAppCompatActivity {
             return;
         }
 
-        String billingName = paymentData.getCardInfo().getBillingAddress().getName();
-        Toast.makeText(this, "payments show name " + billingName, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.payment_activity__payment_success, Toast.LENGTH_LONG).show();
     }
 
     private void handleError(int statusCode) {
-        Log.e("loadPaymentData failed", String.format("Error code: %d", statusCode));
+        Log.e("handleError error", String.format("Error code: %d", statusCode));
+        Toast.makeText(this, R.string.payment_activity__payment_failed, Toast.LENGTH_LONG).show();
     }
 
     // endregion

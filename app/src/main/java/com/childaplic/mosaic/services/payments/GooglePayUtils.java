@@ -8,6 +8,7 @@ import com.google.android.gms.wallet.IsReadyToPayRequest;
 import com.google.android.gms.wallet.PaymentDataRequest;
 import com.google.android.gms.wallet.PaymentMethodTokenizationParameters;
 import com.google.android.gms.wallet.PaymentsClient;
+import com.google.android.gms.wallet.ShippingAddressRequirements;
 import com.google.android.gms.wallet.TransactionInfo;
 import com.google.android.gms.wallet.Wallet;
 import com.google.android.gms.wallet.WalletConstants;
@@ -65,8 +66,8 @@ public class GooglePayUtils {
     private static PaymentDataRequest createPaymentDataRequest(TransactionInfo transactionInfo, PaymentMethodTokenizationParameters params) {
         PaymentDataRequest request = PaymentDataRequest.newBuilder()
                 .setPhoneNumberRequired(false)
-                .setEmailRequired(true)
-                .setShippingAddressRequired(true)
+                .setEmailRequired(false)
+                .setShippingAddressRequired(false)
                 .setTransactionInfo(transactionInfo)
                 .addAllowedPaymentMethods(GooglePayConstants.SUPPORTED_METHODS)
                 .setCardRequirements(CardRequirements.newBuilder()

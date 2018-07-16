@@ -11,4 +11,9 @@ public interface LevelsLogic {
     Level getCurrentLevel();
 
     long getLevelSelectedTimeMillis();
+
+    void enablePaidVersion();
+
+    boolean isPaid();
+
 }

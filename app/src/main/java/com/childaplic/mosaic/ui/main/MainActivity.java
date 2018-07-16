@@ -1,5 +1,6 @@
 package com.childaplic.mosaic.ui.main;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +11,8 @@ import javax.inject.Inject;
 
 import com.childaplic.mosaic.R;
 import com.childaplic.mosaic.presenters.main.MainPresenter;
+import com.childaplic.mosaic.services.advertising.AdvertisingOnClose;
+import com.childaplic.mosaic.services.advertising.AdvertisingService;
 import com.childaplic.mosaic.ui.board.BoardFragment;
 import com.childaplic.mosaic.ui.board.BoardInteraction;
 import com.childaplic.mosaic.ui.loading.LoadingFragment;
@@ -36,6 +39,8 @@ public class MainActivity extends DaggerAppCompatActivity implements
 
     @Inject
     protected MainPresenter mPresenter;
+    @Inject
+    protected AdvertisingService mAdvertisingService;
 
     // endregion
 
@@ -57,7 +62,23 @@ public class MainActivity extends DaggerAppCompatActivity implements
 
         mDecorView = getWindow().getDecorView();
         mFragmentStack = new FragmentStack(getSupportFragmentManager(), R.id.main_activity__fragment_container_id);
-        mFragmentStack.replace(LoadingFragment.newInstance());
+
+        if (mPresenter.isShowBoardOnStart()) {
+            showBoard();
+        } else {
+            showLoading();
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        if (mPresenter.isShowBoardOnStart()) {
+            showBoard();
+        } else {
+            showLoading();
+        }
     }
 
     @Override
@@ -103,12 +124,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
     // region Implements MainContract.View
 
     @Override
-    public void onInit() {
-        // TODO
-    }
-
-    @Override
-    public void onInitError(String message) {
+    public void onError(String message) {
         Toast.makeText(this, "onLoadingError: " + message, Toast.LENGTH_LONG).show();
     }
 
@@ -131,7 +147,11 @@ public class MainActivity extends DaggerAppCompatActivity implements
 
     @Override
     public void onLevelSelected() {
-        showBoard();
+        if (mPresenter.isPaid()) {
+            showBoard();
+        } else {
+            showAdvertising();
+        }
     }
 
     // endregion
@@ -174,8 +194,31 @@ public class MainActivity extends DaggerAppCompatActivity implements
         mFragmentStack.replace(SelectLevelFragment.newInstance());
     }
 
+    private void showAdvertising() {
+        mAdvertisingService.show(new AdvertisingOnClose() {
+            @Override
+            public void onClose() {
+                mAdvertisingService.loadNext();
+                mPresenter.setShowBoardOnStart();
+
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onError() {
+                showBoard();
+            }
+        });
+    }
+
     private void showBoard() {
         mFragmentStack.push(BoardFragment.newInstance());
+    }
+
+    private void showLoading() {
+        mFragmentStack.replace(LoadingFragment.newInstance());
     }
 
     // endregion

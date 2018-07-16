@@ -19,7 +19,7 @@ public interface SelectLevelContract {
 
         LevelItem[] getLevels();
         void selectLevel(String levelId);
-        void openAllLevels();
+        void enablePaidVersion();
 
         String getLevelPriceUSD();
 
