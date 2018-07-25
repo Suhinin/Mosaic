@@ -20,7 +20,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.childaplic.mosaic.R;
+import com.childaplic.mosaic.businesslogics.Constants;
 import com.childaplic.mosaic.services.imageloader.ImageLoaderService;
+import com.childaplic.mosaic.services.logger.LoggerService;
 import com.childaplic.mosaic.services.payments.GooglePayUtils;
 import com.childaplic.mosaic.services.payments.PaymentsService;
 import com.childaplic.mosaic.ui.common.Margin;
@@ -80,6 +82,8 @@ public class PaymentActivity extends DaggerAppCompatActivity {
     protected PaymentsService mPaymentsService;
     @Inject
     protected ImageLoaderService mImageLoaderService;
+    @Inject
+    protected LoggerService mLoggerService;
 
     // endregion
 
@@ -247,6 +251,8 @@ public class PaymentActivity extends DaggerAppCompatActivity {
 //        Currency currency = Currency.getInstance(locale);
 //        return currency.getCurrencyCode();
 
+        // TODO use Constants.LEVELS_PRISE_USD
+
         return "3 $";
     }
 
@@ -347,10 +353,12 @@ public class PaymentActivity extends DaggerAppCompatActivity {
             return;
         }
 
+        mLoggerService.purchase();
         Toast.makeText(this, R.string.payment_activity__payment_success, Toast.LENGTH_LONG).show();
     }
 
     private void handleError(int statusCode) {
+        mLoggerService.purchaseError(statusCode);
         Log.e("handleError error", String.format("Error code: %d", statusCode));
         Toast.makeText(this, R.string.payment_activity__payment_failed, Toast.LENGTH_LONG).show();
     }

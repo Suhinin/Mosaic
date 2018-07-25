@@ -8,7 +8,8 @@ import java.util.Comparator;
 
 import javax.inject.Inject;
 
-import com.childaplic.mosaic.businesslogics.LevelsLogic;
+import com.childaplic.mosaic.businesslogics.Constants;
+import com.childaplic.mosaic.businesslogics.levels.LevelsLogic;
 import com.childaplic.mosaic.repositories.levels.LevelsRepository;
 import com.childaplic.mosaic.repositories.levels.domain.Level;
 import com.childaplic.mosaic.ui.selectlevel.SelectLevelContract;
@@ -95,7 +96,7 @@ public class SelectLevelPresenter implements SelectLevelContract.Presenter {
 
     @Override
     public String getLevelPriceUSD() {
-        return "0.00";
+        return Constants.LEVELS_PRISE_USD;
     }
 
     // endregion

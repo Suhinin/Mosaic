@@ -18,6 +18,9 @@ public interface MainContract {
 
         boolean isPaid();
 
+        void logCompleteLevel();
+        void logStartLevel();
+
     }
 
 }

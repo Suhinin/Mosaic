@@ -161,6 +161,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
 
     @Override
     public void onLevelCompleted() {
+        mPresenter.logCompleteLevel();
         showSelectLevel();
     }
 
@@ -202,7 +203,6 @@ public class MainActivity extends DaggerAppCompatActivity implements
                 mPresenter.setShowBoardOnStart();
 
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
 
@@ -215,6 +215,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
 
     private void showBoard() {
         mFragmentStack.push(BoardFragment.newInstance());
+        mPresenter.logStartLevel();
     }
 
     private void showLoading() {

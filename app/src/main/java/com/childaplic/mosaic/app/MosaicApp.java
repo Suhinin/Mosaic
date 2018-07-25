@@ -35,7 +35,7 @@ public class MosaicApp extends DaggerApplication {
     public void onCreate() {
         super.onCreate();
 
-        mLoggerService.initCrashlitics();
+        mLoggerService.initCrashlytics();
 
 //        boolean isAlarmsEnabled = mSharedService.getBoolean(IS_ALARMS_ENABLED);
 //        if (isAlarmsEnabled == false) {

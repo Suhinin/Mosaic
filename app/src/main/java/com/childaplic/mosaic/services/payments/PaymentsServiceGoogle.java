@@ -3,7 +3,6 @@ package com.childaplic.mosaic.services.payments;
 import android.content.Context;
 import android.content.Intent;
 
-
 import com.childaplic.mosaic.ui.payment.PaymentActivity;
 
 import javax.inject.Inject;
@@ -19,10 +18,15 @@ public class PaymentsServiceGoogle implements PaymentsService {
 
     // region Fields
 
-    private Context mContext;
-
     private String mPriceUSD;
     private PaymentsListener mPaymentsListener;
+
+    // endregion
+
+
+    // region Injections
+
+    private Context mContext;
 
     // endregion
 

@@ -2,12 +2,21 @@ package com.childaplic.mosaic.services.logger;
 
 import android.content.Context;
 
+import com.childaplic.mosaic.businesslogics.Constants;
 import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
+import com.crashlytics.android.answers.LevelEndEvent;
+import com.crashlytics.android.answers.LevelStartEvent;
+import com.crashlytics.android.answers.PurchaseEvent;
 import com.crashlytics.android.core.CrashlyticsCore;
 
 import javax.inject.Inject;
 
 import com.childaplic.mosaic.BuildConfig;
+
+import java.math.BigDecimal;
+import java.util.Currency;
+
 import io.fabric.sdk.android.Fabric;
 
 public class LoggerFabric implements LoggerService {
@@ -20,7 +29,7 @@ public class LoggerFabric implements LoggerService {
     }
 
     @Override
-    public void initCrashlitics() {
+    public void initCrashlytics() {
         Fabric fabric = new Fabric.Builder(mContext)
                 .kits(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build(), new Answers())
                 .debuggable(true)
@@ -28,33 +37,49 @@ public class LoggerFabric implements LoggerService {
         Fabric.with(fabric);
     }
 
-//    @Override
-//    public void startLevel(LevelType levelType) {
-//        Answers.getInstance().logLevelStart(new LevelStartEvent()
-//                .putLevelName(levelType.toString()));
-//    }
-//
-//    @Override
-//    public void winLevel(LevelType levelType, int scores) {
-//        Answers.getInstance().logLevelEnd(new LevelEndEvent()
-//                .putLevelName(levelType.toString())
-//                .putScore(scores)
-//                .putSuccess(true));
-//    }
-//
-//    @Override
-//    public void loseLevel(LevelType levelType) {
-//        Answers.getInstance().logLevelEnd(new LevelEndEvent()
-//                .putLevelName(levelType.toString())
-//                .putSuccess(false));
-//    }
-//
-//    @Override
-//    public void levelTerminate(LevelType levelType) {
-//        Answers.getInstance().logCustom(new CustomEvent("Level Terminated")
-//                .putCustomAttribute("LevelName", levelType.toString()));
-//    }
-//
+    @Override
+    public void startLevel(int levelNumber) {
+        Answers.getInstance().logLevelStart(new LevelStartEvent()
+                .putLevelName(String.valueOf(levelNumber)));
+    }
+
+    @Override
+    public void winLevel(int levelNumber) {
+        Answers.getInstance().logLevelEnd(new LevelEndEvent()
+                .putLevelName(String.valueOf(levelNumber))
+                .putSuccess(true));
+    }
+
+    @Override
+    public void levelTerminate(int levelNumber) {
+        Answers.getInstance().logCustom(new CustomEvent("Level Terminated")
+                .putCustomAttribute("LevelNumber", levelNumber));
+    }
+
+    @Override
+    public void purchase() {
+        double price = Double.parseDouble(Constants.LEVELS_PRISE_USD);
+
+        Answers.getInstance().logPurchase(new PurchaseEvent()
+                .putItemPrice(BigDecimal.valueOf(price))
+                .putCurrency(Currency.getInstance("USD"))
+                .putItemName("Open levels")
+                .putSuccess(true));
+    }
+
+    @Override
+    public void purchaseError(int statusCode) {
+        double price = Double.parseDouble(Constants.LEVELS_PRISE_USD);
+
+        Answers.getInstance().logPurchase(new PurchaseEvent()
+                .putItemPrice(BigDecimal.valueOf(price))
+                .putCurrency(Currency.getInstance("USD"))
+                .putItemName("Open levels")
+                .putItemName("status code = " + statusCode)
+                .putSuccess(false));
+    }
+
+    //
 //    @Override
 //    public void openNotification() {
 //        Answers.getInstance().logCustom(new CustomEvent("Open Notification"));

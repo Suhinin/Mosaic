@@ -32,11 +32,14 @@ import com.childaplic.mosaic.services.assets.AssetsService;
 import com.childaplic.mosaic.services.imageloader.ImageLoaderService;
 import com.childaplic.mosaic.ui.common.Margin;
 import com.childaplic.mosaic.ui.common.Size;
+import com.childaplic.mosaic.utils.FragmentStack;
 import com.childaplic.mosaic.utils.LayoutHelper;
 import com.childaplic.mosaic.utils.ScreenUtil;
 import dagger.android.support.DaggerFragment;
 
-public class BoardFragment extends DaggerFragment implements BoardContract.View {
+public class BoardFragment extends DaggerFragment implements
+        BoardContract.View,
+        FragmentStack.OnBackPressedHandlingFragment {
 
     // region Constants
 
@@ -152,6 +155,12 @@ public class BoardFragment extends DaggerFragment implements BoardContract.View 
     }
 
     // endregion
+
+    @Override
+    public boolean onBackPressed() {
+        mPresenter.logTerminateLevel();
+        return false;
+    }
 
 
     // region Init View

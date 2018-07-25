@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+
     <string name="payment_activity__payment_success">The payment is successfully made</string>
     <string name="payment_activity__payment_failed">An error occurred during payment</string>
     

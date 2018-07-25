@@ -2,8 +2,8 @@ package com.childaplic.mosaic.di.modules;
 
 import javax.inject.Singleton;
 
-import com.childaplic.mosaic.businesslogics.LevelsLogic;
-import com.childaplic.mosaic.businesslogics.LevelsLogicStandard;
+import com.childaplic.mosaic.businesslogics.levels.LevelsLogic;
+import com.childaplic.mosaic.businesslogics.levels.LevelsLogicStandard;
 import dagger.Module;
 import dagger.Provides;
 

@@ -1,4 +1,4 @@
-package com.childaplic.mosaic.businesslogics;
+package com.childaplic.mosaic.businesslogics.levels;
 
 import javax.inject.Inject;
 

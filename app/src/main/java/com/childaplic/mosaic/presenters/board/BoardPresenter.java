@@ -6,12 +6,13 @@ import android.util.Log;
 
 import javax.inject.Inject;
 
-import com.childaplic.mosaic.businesslogics.LevelsLogic;
+import com.childaplic.mosaic.businesslogics.levels.LevelsLogic;
 import com.childaplic.mosaic.repositories.levels.LevelsRepository;
 import com.childaplic.mosaic.repositories.levels.domain.Cell;
 import com.childaplic.mosaic.repositories.levels.domain.Level;
 import com.childaplic.mosaic.repositories.levels.domain.LevelState;
 import com.childaplic.mosaic.repositories.levels.domain.PalettePiece;
+import com.childaplic.mosaic.services.logger.LoggerService;
 import com.childaplic.mosaic.ui.board.BoardContract;
 import com.childaplic.mosaic.ui.board.BoardViewNull;
 
@@ -52,6 +53,7 @@ public class BoardPresenter implements BoardContract.Presenter {
 
     private LevelsLogic mLevelsLogic;
     private LevelsRepository mLevelsRepository;
+    private LoggerService mLoggerService;
 
     // endregion
 
@@ -59,9 +61,10 @@ public class BoardPresenter implements BoardContract.Presenter {
     // region Constructors
 
     @Inject
-    public BoardPresenter(LevelsLogic levelsLogic, LevelsRepository levelsRepository) {
+    public BoardPresenter(LevelsLogic levelsLogic, LevelsRepository levelsRepository, LoggerService loggerService) {
         mLevelsLogic = levelsLogic;
         mLevelsRepository = levelsRepository;
+        mLoggerService = loggerService;
 
         mPalette = new PalettePieceItem[0];
         mBoard = new CellItem[0][];
@@ -143,6 +146,11 @@ public class BoardPresenter implements BoardContract.Presenter {
     @Override
     public boolean isSoundEnabled() {
         return mSoundEnabled;
+    }
+
+    @Override
+    public void logTerminateLevel() {
+        mLoggerService.levelTerminate(mLevel.getNumber());
     }
 
     // endregion

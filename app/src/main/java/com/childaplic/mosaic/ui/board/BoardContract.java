@@ -35,5 +35,7 @@ public interface BoardContract {
 
         boolean toggleSoundEnabled();
 
+        void logTerminateLevel();
+
     }
 }
