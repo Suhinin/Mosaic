@@ -2,6 +2,8 @@ package com.childaplic.mosaic.presenters.main;
 
 import javax.inject.Inject;
 
+import com.childaplic.mosaic.businesslogics.levels.LevelsLogic;
+import com.childaplic.mosaic.services.logger.LoggerService;
 import com.childaplic.mosaic.ui.main.MainContract;
 import com.childaplic.mosaic.ui.main.MainViewNull;
 
@@ -11,12 +13,15 @@ public class MainPresenter implements MainContract.Presenter {
 
     private MainContract.View mView;
 
+    private boolean mShowBoardOnStart;
+
     // endregion
 
 
     // region Injections
 
-    // TODO
+    private LevelsLogic mLevelsLogic;
+    private LoggerService mLoggerService;
 
     // endregion
 
@@ -24,8 +29,11 @@ public class MainPresenter implements MainContract.Presenter {
     // region Constructors
 
     @Inject
-    public MainPresenter() {
-        // TODO
+    public MainPresenter(LevelsLogic levelsLogic, LoggerService loggerService) {
+        mLevelsLogic = levelsLogic;
+        mLoggerService = loggerService;
+
+        mShowBoardOnStart = false;
     }
 
     // endregion
@@ -41,6 +49,36 @@ public class MainPresenter implements MainContract.Presenter {
     @Override
     public void onDetachView() {
         mView = new MainViewNull();
+    }
+
+    @Override
+    public void setShowBoardOnStart() {
+        mShowBoardOnStart = true;
+    }
+
+    @Override
+    public boolean isShowBoardOnStart() {
+        boolean isShowBoard = mShowBoardOnStart;
+        mShowBoardOnStart = false;
+
+        return isShowBoard;
+    }
+
+    @Override
+    public boolean isPaid() {
+        return mLevelsLogic.isPaid();
+    }
+
+    @Override
+    public void logStartLevel() {
+        int number = mLevelsLogic.getCurrentLevel().getNumber();
+        mLoggerService.startLevel(number);
+    }
+
+    @Override
+    public void logCompleteLevel() {
+        int number = mLevelsLogic.getCurrentLevel().getNumber();
+        mLoggerService.winLevel(number);
     }
 
     // endregion

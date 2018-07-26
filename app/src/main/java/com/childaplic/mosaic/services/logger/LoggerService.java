@@ -3,16 +3,18 @@ package com.childaplic.mosaic.services.logger;
 
 public interface LoggerService {
 
-    void initCrashlitics();
+    void initCrashlytics();
 
-//    void startLevel(LevelType levelType);
-//
-//    void winLevel(LevelType levelType, int scores);
-//
-//    void loseLevel(LevelType levelType);
-//
-//    void levelTerminate(LevelType levelType);
-//
+    void startLevel(int levelNumber);
+
+    void winLevel(int levelNumber);
+
+    void levelTerminate(int levelNumber);
+
+    void purchase();
+
+    void purchaseError(int statusCode);
+
 //    void openNotification();
 //
 //    void cancelNotification();

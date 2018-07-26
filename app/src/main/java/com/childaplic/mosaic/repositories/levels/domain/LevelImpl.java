@@ -10,7 +10,6 @@ public class LevelImpl implements Level {
     private String mPreviewPath;
     private LevelState mState;
     private boolean mIsShowOnBoarding;
-    private int mIncorrectAnswers;
     private PalettePiece[] mPalette;
     private Cell[][] mBoard;
 
@@ -18,16 +17,6 @@ public class LevelImpl implements Level {
 
 
     // region Implements Level
-
-    @Override
-    public int getIncorrectAnswers() {
-        return mIncorrectAnswers;
-    }
-
-    @Override
-    public void setIncorrectAnswers(int count) {
-        mIncorrectAnswers = count;
-    }
 
     @Override
     public int getNumber() {

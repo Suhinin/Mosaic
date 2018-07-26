@@ -18,7 +18,10 @@ public interface SelectLevelContract {
         void onDetachView();
 
         LevelItem[] getLevels();
-        void selectLevel(LevelItem levelItem);
+        void selectLevel(String levelId);
+        void enablePaidVersion();
+
+        String getLevelPriceUSD();
 
     }
 

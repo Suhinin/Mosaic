@@ -65,8 +65,7 @@ public class LevelsRepositoryStandard implements LevelsRepository {
         level.setPreviewPath(defaultLevel.getPreviewPath());
         level.setPalette(defaultLevel.getPalette());
         level.setBoard(createBoard(defaultLevel.getBoard()));
-        level.setState(LevelState.OPEN);
-        level.setIncorrectAnswers(0);
+        level.setState(defaultLevel.isOpen() ? LevelState.OPEN : LevelState.DISABLED);
         level.setShowOnBoarding(false);
 
         saveLevel(level);
@@ -98,6 +97,18 @@ public class LevelsRepositoryStandard implements LevelsRepository {
         insertOrUpdateLevel(levelDto);
     }
 
+    @Override
+    public void openAllLevels() {
+        for (Level level : mLevels.values()) {
+            if (level.getState() == LevelState.DISABLED) {
+                level.setState(LevelState.OPEN);
+
+                LevelDto levelDto = toLevelDto(level);
+                insertOrUpdateLevel(levelDto);
+            }
+        }
+    }
+
     // endregion
 
 
@@ -127,11 +138,9 @@ public class LevelsRepositoryStandard implements LevelsRepository {
         LevelDto levelDto = mLevelsDao.getById(levelData.getId());
         if (levelDto != null) {
             level.setState(LevelState.fromString(levelDto.getState()));
-            level.setIncorrectAnswers(levelDto.getIncorrectAnswers());
             level.setBoard(deserializeBoard(levelDto.getBoardJson()));
         } else {
-            level.setState(LevelState.OPEN);
-            level.setIncorrectAnswers(0);
+            level.setState(levelData.isOpen() ? LevelState.OPEN : LevelState.DISABLED);
             level.setBoard(createBoard(levelData.getBoard()));
         }
 
@@ -163,7 +172,6 @@ public class LevelsRepositoryStandard implements LevelsRepository {
         dto.setId(level.getId());
         dto.setState(level.getState().toString());
         dto.setShowOnBoarding(level.isShowOnBoarding());
-        dto.setIncorrectAnswers(level.getIncorrectAnswers());
         dto.setBoardJson(serializeBoard(level.getBoard()));
 
         return dto;

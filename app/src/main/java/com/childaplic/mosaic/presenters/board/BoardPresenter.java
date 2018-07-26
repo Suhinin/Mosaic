@@ -6,12 +6,13 @@ import android.util.Log;
 
 import javax.inject.Inject;
 
-import com.childaplic.mosaic.businesslogics.LevelsLogic;
+import com.childaplic.mosaic.businesslogics.levels.LevelsLogic;
 import com.childaplic.mosaic.repositories.levels.LevelsRepository;
 import com.childaplic.mosaic.repositories.levels.domain.Cell;
 import com.childaplic.mosaic.repositories.levels.domain.Level;
 import com.childaplic.mosaic.repositories.levels.domain.LevelState;
 import com.childaplic.mosaic.repositories.levels.domain.PalettePiece;
+import com.childaplic.mosaic.services.logger.LoggerService;
 import com.childaplic.mosaic.ui.board.BoardContract;
 import com.childaplic.mosaic.ui.board.BoardViewNull;
 
@@ -27,8 +28,6 @@ public class BoardPresenter implements BoardContract.Presenter {
 
     private final String TAG = BoardPresenter.class.getCanonicalName();
 
-    private final int STARS_COUNT = 3;
-
     // endregion
 
 
@@ -39,13 +38,10 @@ public class BoardPresenter implements BoardContract.Presenter {
     private Level mLevel;
     private long mLevelRequestTimeMillis;
 
-    private InitState mInitState;
     private String mInitErrorMsg;
 
     private PalettePieceItem[] mPalette;
     private CellItem[][] mBoard;
-
-    private int mIncorrectAnswersCount;
 
     private Handler mNextLevelHandler;
     private boolean mSoundEnabled;
@@ -57,6 +53,7 @@ public class BoardPresenter implements BoardContract.Presenter {
 
     private LevelsLogic mLevelsLogic;
     private LevelsRepository mLevelsRepository;
+    private LoggerService mLoggerService;
 
     // endregion
 
@@ -64,16 +61,15 @@ public class BoardPresenter implements BoardContract.Presenter {
     // region Constructors
 
     @Inject
-    public BoardPresenter(LevelsLogic levelsLogic, LevelsRepository levelsRepository) {
+    public BoardPresenter(LevelsLogic levelsLogic, LevelsRepository levelsRepository, LoggerService loggerService) {
         mLevelsLogic = levelsLogic;
         mLevelsRepository = levelsRepository;
+        mLoggerService = loggerService;
 
         mPalette = new PalettePieceItem[0];
         mBoard = new CellItem[0][];
-        mIncorrectAnswersCount = 0;
 
         mSoundEnabled = true;
-        mInitState = InitState.NONE;
     }
 
     // endregion
@@ -85,7 +81,7 @@ public class BoardPresenter implements BoardContract.Presenter {
     public void onAttachView(BoardContract.View view) {
         mView = view;
 
-        if (mInitState == InitState.NONE || needRequestLevel()) {
+        if (needRequestLevel()) {
             startInitTask();
         }
 
@@ -95,7 +91,10 @@ public class BoardPresenter implements BoardContract.Presenter {
     @Override
     public void onDetachView() {
         mView = new BoardViewNull();
-        saveLevelState();
+
+        mLevel.setBoard(getBoardCells());
+        mLevelsRepository.saveLevel(mLevel);
+
         releaseNextLevelHandler();
     }
 
@@ -119,21 +118,17 @@ public class BoardPresenter implements BoardContract.Presenter {
 
     @Override
     public void resetBoard() {
-        mIncorrectAnswersCount = 0;
-
         mLevel = mLevelsRepository.resetLevel(mLevel.getId());
         initBoard();
         mLevelRequestTimeMillis = System.currentTimeMillis();
     }
 
     @Override
-    public void incIncorrectCount() {
-        mIncorrectAnswersCount++;
-    }
-
-    @Override
     public void levelCompleted() {
-        saveLevelState();
+        mLevel.setState(LevelState.COMPLETED);
+        mLevel.setBoard(getBoardCells());
+        mLevelsRepository.saveLevel(mLevel);
+
         mNextLevelHandler.postDelayed(mNextLevelRunnable, 4000);
     }
 
@@ -153,15 +148,22 @@ public class BoardPresenter implements BoardContract.Presenter {
         return mSoundEnabled;
     }
 
+    @Override
+    public void logTerminateLevel() {
+        mLoggerService.levelTerminate(mLevel.getNumber());
+    }
+
     // endregion
 
 
     // region Private Methods
 
+    private boolean needRequestLevel() {
+        return mLevelsLogic.getLevelSelectedTimeMillis() > mLevelRequestTimeMillis;
+    }
+
     @SuppressLint("CheckResult")
     private void startInitTask() {
-        mInitState = InitState.LOADING;
-
         Completable
                 .fromAction(new Action() {
                     @Override
@@ -174,7 +176,7 @@ public class BoardPresenter implements BoardContract.Presenter {
                 .subscribe(new Action() {
                     @Override
                     public void run() throws Exception {
-                        mInitState = InitState.COMPLETE;
+                        mLevelRequestTimeMillis = System.currentTimeMillis();
                         mView.onInit();
                     }
                 }, new Consumer<Throwable>() {
@@ -182,7 +184,6 @@ public class BoardPresenter implements BoardContract.Presenter {
                     public void accept(Throwable throwable) throws Exception {
                         Log.e(TAG, "startInitTask error: " + throwable.getMessage());
                         mInitErrorMsg = throwable.getMessage();
-                        mInitState = InitState.ERROR;
                         mView.onInitError(throwable.getMessage());
                     }
                 });
@@ -192,8 +193,6 @@ public class BoardPresenter implements BoardContract.Presenter {
         mLevel = mLevelsLogic.getCurrentLevel();
         initBoard();
         createPalette(mLevel.getPalette());
-
-        mLevelRequestTimeMillis = System.currentTimeMillis();
     }
 
     private void initBoard() {
@@ -251,14 +250,6 @@ public class BoardPresenter implements BoardContract.Presenter {
         }
     };
 
-    private void saveLevelState() {
-        int levelStars = calculateLevelStars();
-        mLevel.setState(getLevelState(levelStars));
-        mLevel.setIncorrectAnswers(mIncorrectAnswersCount);
-        mLevel.setBoard(getBoardCells());
-        mLevelsRepository.saveLevel(mLevel);
-    }
-
     private Cell[][] getBoardCells() {
         int rows = mBoard.length;
         int cols = mBoard.length > 0 ? mBoard[0].length : 0;
@@ -280,39 +271,6 @@ public class BoardPresenter implements BoardContract.Presenter {
         cell.setPicked(cellItem.isPicked());
 
         return cell;
-    }
-
-    private int calculateLevelStars() {
-        int correctAnswers = calculateCorrectAnswers();
-
-        int allAnswers = correctAnswers + mIncorrectAnswersCount;
-        float percent = (float) correctAnswers / allAnswers;
-        return Math.round(percent * STARS_COUNT);
-    }
-
-    private int calculateCorrectAnswers() {
-        int answers = 0;
-        for(int i=0; i<mBoard.length; i++) {
-            for (int j=0; j<mBoard[i].length; j++) {
-                answers += mBoard[i][j] != null ? 1 : 0;
-            }
-        }
-
-        return answers;
-    }
-
-    private LevelState getLevelState(int stars) {
-        switch (stars) {
-            default:
-            case 0: return LevelState.OPEN;
-            case 1: return LevelState.ONE_STAR;
-            case 2: return LevelState.TWO_STARS;
-            case 3: return LevelState.THREE_STARS;
-        }
-    }
-
-    private boolean needRequestLevel() {
-        return mLevelsLogic.getLevelSelectedTimeMillis() > mLevelRequestTimeMillis;
     }
 
     // endregion

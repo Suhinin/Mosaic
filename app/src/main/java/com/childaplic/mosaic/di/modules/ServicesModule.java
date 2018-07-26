@@ -56,6 +56,7 @@ public class ServicesModule {
     public ImageLoaderService provideImageLoader(ImageLoaderStandard service) {
         return service;
     }
+
 //
 //    @Provides
 //    @Singleton

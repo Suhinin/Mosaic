@@ -1,5 +1,6 @@
 {
   "number": 8,
+  "open": true,
   "preview_path": "images/previews/picture_8.png",
   "palette": [
     {
@@ -233,7 +234,7 @@
         "piece_id": "red"
       },
       {
-        "row": 3,
+        "row": 6,
         "col": 7,
         "piece_id": "black"
       },

@@ -1,7 +1,6 @@
 package com.childaplic.mosaic.presenters.selectlevel;
 
 import android.annotation.SuppressLint;
-import android.os.Handler;
 import android.util.Log;
 
 import java.util.Arrays;
@@ -9,10 +8,10 @@ import java.util.Comparator;
 
 import javax.inject.Inject;
 
-import com.childaplic.mosaic.businesslogics.LevelsLogic;
+import com.childaplic.mosaic.businesslogics.Constants;
+import com.childaplic.mosaic.businesslogics.levels.LevelsLogic;
 import com.childaplic.mosaic.repositories.levels.LevelsRepository;
 import com.childaplic.mosaic.repositories.levels.domain.Level;
-import com.childaplic.mosaic.repositories.levels.domain.LevelNull;
 import com.childaplic.mosaic.ui.selectlevel.SelectLevelContract;
 import com.childaplic.mosaic.ui.selectlevel.SelectLevelViewNull;
 import io.reactivex.Completable;
@@ -34,10 +33,10 @@ public class SelectLevelPresenter implements SelectLevelContract.Presenter {
 
     private SelectLevelContract.View mView;
 
-    private InitState mInitState;
-    private String mInitErrorMsg;
-
     private LevelItem[] mLevelItems;
+
+    private String mInitErrorMsg;
+    private long mLevelsRequestTimeMillis;
 
     // endregion
 
@@ -57,7 +56,7 @@ public class SelectLevelPresenter implements SelectLevelContract.Presenter {
         mLevelsLogic = levelsLogic;
         mLevelsRepository = levelsRepository;
 
-        mInitState = InitState.NONE;
+        mLevelItems = new LevelItem[0];
     }
 
     // endregion
@@ -69,7 +68,7 @@ public class SelectLevelPresenter implements SelectLevelContract.Presenter {
     public void onAttachView(SelectLevelContract.View view) {
         mView = view;
 
-        if (mInitState == InitState.NONE) {
+        if (needRequestLevels()) {
             startInitTask();
         }
     }
@@ -85,8 +84,19 @@ public class SelectLevelPresenter implements SelectLevelContract.Presenter {
     }
 
     @Override
-    public void selectLevel(LevelItem levelItem) {
-        mLevelsLogic.setCurrentLevelId(levelItem.getId());
+    public void selectLevel(String levelId) {
+        mLevelsLogic.setCurrentLevelId(levelId);
+    }
+
+    @Override
+    public void enablePaidVersion() {
+        mLevelsLogic.enablePaidVersion();
+        createLevelItems();
+    }
+
+    @Override
+    public String getLevelPriceUSD() {
+        return Constants.LEVELS_PRISE_USD;
     }
 
     // endregion
@@ -94,10 +104,12 @@ public class SelectLevelPresenter implements SelectLevelContract.Presenter {
 
     // region Private Methods
 
+    private boolean needRequestLevels() {
+        return mLevelsRequestTimeMillis <= 0;
+    }
+
     @SuppressLint("CheckResult")
     private void startInitTask() {
-        mInitState = InitState.LOADING;
-
         Completable
                 .fromAction(new Action() {
                     @Override
@@ -110,7 +122,7 @@ public class SelectLevelPresenter implements SelectLevelContract.Presenter {
                 .subscribe(new Action() {
                     @Override
                     public void run() throws Exception {
-                        mInitState = InitState.COMPLETE;
+                        mLevelsRequestTimeMillis = System.currentTimeMillis();
                         mView.onInit();
                     }
                 }, new Consumer<Throwable>() {
@@ -118,7 +130,6 @@ public class SelectLevelPresenter implements SelectLevelContract.Presenter {
                     public void accept(Throwable throwable) throws Exception {
                         Log.e(TAG, "startInitTask error: " + throwable.getMessage());
                         mInitErrorMsg = throwable.getMessage();
-                        mInitState = InitState.ERROR;
                         mView.onInitError(throwable.getMessage());
                     }
                 });
@@ -145,6 +156,7 @@ public class SelectLevelPresenter implements SelectLevelContract.Presenter {
         levelItem.setId(level.getId());
         levelItem.setNumber(level.getNumber());
         levelItem.setPreviewPath(level.getPreviewPath());
+        levelItem.setState(level.getState());
 
         return levelItem;
     }

@@ -7,6 +7,8 @@ public class Level {
 
     public int number;
 
+    public boolean open;
+
     @SerializedName("preview_path")
     public String previewPath;
 

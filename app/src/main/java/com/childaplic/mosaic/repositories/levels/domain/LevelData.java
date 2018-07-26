@@ -14,6 +14,7 @@ public class LevelData {
 
     private String mId;
     private int mNumber;
+    private boolean mOpen;
     private String mPreviewPath;
     private PalettePiece[] mPalette;
     private String[][] mBoard;
@@ -37,6 +38,14 @@ public class LevelData {
 
     public void setNumber(int number) {
         mNumber = number;
+    }
+
+    public boolean isOpen() {
+        return mOpen;
+    }
+
+    public void setOpen(boolean open) {
+        mOpen = open;
     }
 
     public String getPreviewPath() {

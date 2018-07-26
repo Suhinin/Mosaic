@@ -24,4 +24,12 @@
 
     <!-- endregion -->
 
+
+    <!-- region PaymentActivity -->
+
+    <dimen name="payment_activity__btn_pay_size">100dp</dimen>
+    <dimen name="payment_activity__btn_pay_margin">16dp</dimen>
+
+    <!-- endregion -->
+
 </resources>

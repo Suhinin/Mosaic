@@ -15,4 +15,6 @@ public interface LevelsRepository {
 
     void saveLevel(Level level);
 
+    void openAllLevels();
+
 }

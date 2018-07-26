@@ -4,8 +4,7 @@ public interface MainContract {
 
     interface View {
 
-        void onInit();
-        void onInitError(String message);
+        void onError(String message);
 
     }
 
@@ -13,6 +12,14 @@ public interface MainContract {
 
         void onAttachView(View view);
         void onDetachView();
+
+        void setShowBoardOnStart();
+        boolean isShowBoardOnStart();
+
+        boolean isPaid();
+
+        void logCompleteLevel();
+        void logStartLevel();
 
     }
 

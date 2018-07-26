@@ -5,9 +5,7 @@ public enum  LevelState {
 
     DISABLED("disabled"),
     OPEN("open"),
-    ONE_STAR("one_star"),
-    TWO_STARS("two_stars"),
-    THREE_STARS("three_stars");
+    COMPLETED("completed");
 
     private String mValue;
 

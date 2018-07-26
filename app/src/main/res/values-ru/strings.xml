@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="payment_activity__payment_success">Платеж успешно выполнен</string>
+    <string name="payment_activity__payment_failed">Во время платежа произошла ошибка</string>
+
+</resources>

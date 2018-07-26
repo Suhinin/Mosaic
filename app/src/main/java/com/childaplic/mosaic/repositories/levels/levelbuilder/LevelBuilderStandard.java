@@ -90,6 +90,7 @@ public class LevelBuilderStandard implements LevelBuilder {
         LevelData levelData = new LevelData();
         levelData.setId(levelName);
         levelData.setNumber(level.number);
+        levelData.setOpen(level.open);
         levelData.setPreviewPath(level.previewPath);
         levelData.setPalette(createPalette(level.palette));
         levelData.setBoard(createBoardCells(level.board));

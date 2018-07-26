@@ -19,11 +19,6 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".ui.main.MainActivity"
-            android:screenOrientation="landscape"
-            android:launchMode="singleTop"/>
-
-        <activity
             android:name=".ui.splash.SplashActivity"
             android:noHistory="true"
             android:theme="@style/SplashTheme"
@@ -34,6 +29,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ui.main.MainActivity"
+            android:screenOrientation="landscape"
+            android:launchMode="singleTask"/>
 
         <meta-data
             android:name="io.fabric.ApiKey"

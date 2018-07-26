@@ -17,10 +17,6 @@ public interface Level {
 
     void setShowOnBoarding(boolean isShow);
 
-    int getIncorrectAnswers();
-
-    void setIncorrectAnswers(int count);
-
     PalettePiece[] getPalette();
 
     Cell[][] getBoard();

@@ -26,8 +26,8 @@ public class LoadingPresenter implements LoadingContract.Presenter {
 
     private LoadingContract.View mView;
 
-    private LoadingState mLoadingState;
     private String mLoadingErrorMsg;
+    private long mLevelsRequestTimeMillis;
 
     // endregion
 
@@ -44,8 +44,6 @@ public class LoadingPresenter implements LoadingContract.Presenter {
     @Inject
     public LoadingPresenter(LevelsRepository levelsRepository) {
         mLevelsRepository = levelsRepository;
-
-        mLoadingState = LoadingState.NONE;
     }
 
     // endregion
@@ -57,7 +55,7 @@ public class LoadingPresenter implements LoadingContract.Presenter {
     public void onAttachView(LoadingContract.View view) {
         mView = view;
 
-        if (mLoadingState == LoadingState.NONE) {
+        if (needRequestLevels()) {
             startLoadingTask();
         }
     }
@@ -72,9 +70,12 @@ public class LoadingPresenter implements LoadingContract.Presenter {
 
     // region Private Methods
 
+    private boolean needRequestLevels() {
+        return mLevelsRequestTimeMillis <= 0;
+    }
+
     private void startLoadingTask() {
         mView.onStartLoading();
-        mLoadingState = LoadingState.LOADING;
 
         Completable
                 .fromAction(new Action() {
@@ -88,7 +89,7 @@ public class LoadingPresenter implements LoadingContract.Presenter {
                 .subscribe(new Action() {
                     @Override
                     public void run() throws Exception {
-                        mLoadingState = LoadingState.COMPLETE;
+                        mLevelsRequestTimeMillis = System.currentTimeMillis();
                         mView.onLoadingComplete();
                     }
                 }, new Consumer<Throwable>() {
@@ -96,7 +97,6 @@ public class LoadingPresenter implements LoadingContract.Presenter {
                     public void accept(Throwable throwable) throws Exception {
                         Log.e(TAG, "startLoadingTask error: " + throwable.getMessage());
                         mLoadingErrorMsg = throwable.getMessage();
-                        mLoadingState = LoadingState.ERROR;
                         mView.onLoadingError(throwable.getMessage());
                     }
                 });

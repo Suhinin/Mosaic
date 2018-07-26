@@ -5,6 +5,7 @@ import android.database.Cursor;
 
 import javax.inject.Inject;
 
+import com.childaplic.mosaic.repositories.levels.domain.LevelState;
 import com.childaplic.mosaic.services.sqlite.DBManager;
 
 
@@ -17,7 +18,6 @@ public class LevelsDaoSql implements LevelsDao {
     private final String LEVEL__ID = "id";
     private final String LEVEL__STATE = "state";
     private final String LEVEL__IS_SHOW_ON_BOARDING = "is_show_on_boarding";
-    private final String LEVEL__INCORRECT_ANSWERS = "incorrect_answers";
     private final String LEVEL__BOARD_JSON = "board_json";
 
     // endregion
@@ -108,7 +108,6 @@ public class LevelsDaoSql implements LevelsDao {
                 LEVEL__ID + " TEXT PRIMARY KEY, " +
                 LEVEL__STATE + " TEXT, " +
                 LEVEL__IS_SHOW_ON_BOARDING + " INTEGER, " +
-                LEVEL__INCORRECT_ANSWERS + " INTEGER, " +
                 LEVEL__BOARD_JSON + " TEXT " +
                 ");";
 
@@ -121,7 +120,6 @@ public class LevelsDaoSql implements LevelsDao {
         values.put(LEVEL__ID, dto.getId());
         values.put(LEVEL__STATE, dto.getState());
         values.put(LEVEL__IS_SHOW_ON_BOARDING, dto.isShowOnBoarding());
-        values.put(LEVEL__INCORRECT_ANSWERS, dto.getIncorrectAnswers());
         values.put(LEVEL__BOARD_JSON, dto.getBoardJson());
 
         return values;
@@ -131,14 +129,12 @@ public class LevelsDaoSql implements LevelsDao {
         int idIndex = cursor.getColumnIndex(LEVEL__ID);
         int stateIndex = cursor.getColumnIndex(LEVEL__STATE);
         int isShowOnBoardingIndex = cursor.getColumnIndex(LEVEL__IS_SHOW_ON_BOARDING);
-        int incorrectAnswersIndex = cursor.getColumnIndex(LEVEL__INCORRECT_ANSWERS);
         int boardJsonIndex = cursor.getColumnIndex(LEVEL__BOARD_JSON);
 
         LevelDto dto = new LevelDto();
         dto.setId(cursor.getString(idIndex));
         dto.setState(cursor.getString(stateIndex));
         dto.setShowOnBoarding(cursor.getInt(isShowOnBoardingIndex) == 1);
-        dto.setIncorrectAnswers(cursor.getInt(incorrectAnswersIndex));
         dto.setBoardJson(cursor.getString(boardJsonIndex));
 
         return dto;

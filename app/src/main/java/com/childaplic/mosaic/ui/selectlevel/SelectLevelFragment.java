@@ -56,6 +56,7 @@ public class SelectLevelFragment extends DaggerFragment implements SelectLevelCo
 
     private SelectLevelInteraction mInteractionListener;
     private LevelsAdapter mLevelsAdapter;
+    private boolean mIsLevelsClickable = true;
 
     // endregion
 
@@ -74,12 +75,7 @@ public class SelectLevelFragment extends DaggerFragment implements SelectLevelCo
     // region Constructors
 
     public static SelectLevelFragment newInstance() {
-        Bundle args = new Bundle();
-
-        SelectLevelFragment fragment = new SelectLevelFragment();
-        fragment.setArguments(args);
-
-        return fragment;
+        return new SelectLevelFragment();
     }
 
     // endregion
@@ -109,6 +105,7 @@ public class SelectLevelFragment extends DaggerFragment implements SelectLevelCo
     public void onResume() {
         super.onResume();
 
+        mIsLevelsClickable = true;
         mPresenter.onAttachView(this);
     }
 
@@ -223,21 +220,29 @@ public class SelectLevelFragment extends DaggerFragment implements SelectLevelCo
         mSharedService.putInt(SHARED__FIRST_VISIBLE_LIST_POSITION, position);
     }
 
+    private void openSelectedLevel(LevelItem levelItem) {
+        mPresenter.selectLevel(levelItem.getId());
+        mInteractionListener.onLevelSelected();
+        mIsLevelsClickable = true;
+    }
+
     // endregion
 
 
     // region Listeners
 
     private LevelClickHandler mLevelClickHandler = new LevelClickHandler() {
-
         @Override
         public void onClick(View view, int adapterPosition) {
+            if (mIsLevelsClickable == false) {
+                return;
+            }
+
+            mIsLevelsClickable = false;
+
             LevelItem levelItem = mLevelsAdapter.getItem(adapterPosition);
-            mPresenter.selectLevel(levelItem);
-
-            mInteractionListener.onLevelSelected();
+            openSelectedLevel(levelItem);
         }
-
     };
 
     // endregion
