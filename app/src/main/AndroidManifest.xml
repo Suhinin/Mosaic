@@ -35,17 +35,9 @@
             android:screenOrientation="landscape"
             android:launchMode="singleTask"/>
 
-        <activity
-            android:name=".ui.payment.PaymentActivity"
-            android:screenOrientation="landscape" />
-
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="15abbe116f174a4a05a716869e42f83a6e9f5e0c" />
-
-        <meta-data
-            android:name="com.google.android.gms.wallet.api.enabled"
-            android:value="true" />
 
         <!--<receiver android:name=".broadcasts.AlarmNotificationPublisher" />-->
         <!--<receiver android:name=".broadcasts.AlarmNotificationReceiver"/>-->
